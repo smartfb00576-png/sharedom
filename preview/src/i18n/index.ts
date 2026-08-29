@@ -6,7 +6,7 @@ export type Translations = typeof en;
 
 const translations: Record<Language, Translations> = { en, es };
 
-let currentLang: Language = (localStorage.getItem('snapdom_lang') as Language) || 'en';
+let currentLang: Language = (localStorage.getItem('sharedom_lang') as Language) || 'en';
 
 if (typeof document !== 'undefined') {
   document.title = translations[currentLang].metaTitle;
@@ -26,7 +26,7 @@ export function getT(): Translations {
 
 export function setLanguage(lang: Language): void {
   currentLang = lang;
-  localStorage.setItem('snapdom_lang', lang);
+  localStorage.setItem('sharedom_lang', lang);
   document.documentElement.lang = lang;
   document.title = translations[currentLang].metaTitle;
   listeners.forEach((listener) => listener(currentLang, translations[currentLang]));

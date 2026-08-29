@@ -4,7 +4,7 @@ export function resolveElement(target: DomTarget): HTMLElement {
     if (typeof target === 'string') {
         const element = document.querySelector<HTMLElement>(target);
         if (!element) {
-            throw new Error(`[snapdom]: No element found matching selector "${target}".`);
+            throw new Error(`[sharedom]: No element found matching selector "${target}".`);
         }
         return element;
     }
@@ -13,7 +13,7 @@ export function resolveElement(target: DomTarget): HTMLElement {
         return target;
     }
 
-    throw new Error('[snapdom]: Target must be a valid CSS selector string or an HTMLElement.');
+    throw new Error('[sharedom]: Target must be a valid CSS selector string or an HTMLElement.');
 }
 
 export function validateElementDimensions(element: HTMLElement): { width: number; height: number } {
@@ -22,7 +22,7 @@ export function validateElementDimensions(element: HTMLElement): { width: number
     const height = Math.round(rect.height);
 
     if (width <= 0 || height <= 0) {
-        throw new Error('[snapdom]: Cannot capture element with width or height of 0. Ensure the element is visible in the DOM.');
+        throw new Error('[sharedom]: Cannot capture element with width or height of 0. Ensure the element is visible in the DOM.');
     }
 
     return { width, height };
@@ -30,15 +30,15 @@ export function validateElementDimensions(element: HTMLElement): { width: number
 
 export function validateOptions(options: { scale?: number; quality?: number; format?: string }): void {
     if (options.scale !== undefined && (typeof options.scale !== 'number' || options.scale <= 0)) {
-        throw new Error('[snapdom]: Scale option must be a positive number.');
+        throw new Error('[sharedom]: Scale option must be a positive number.');
     }
 
     if (options.quality !== undefined && (typeof options.quality !== 'number' || options.quality < 0 || options.quality > 1)) {
-        throw new Error('[snapdom]: Quality option must be a number between 0 and 1.');
+        throw new Error('[sharedom]: Quality option must be a number between 0 and 1.');
     }
 
     if (options.format !== undefined && options.format !== 'png' && options.format !== 'jpeg' && options.format !== 'webp') {
-        throw new Error('[snapdom]: Format option must be "png", "jpeg", or "webp".');
+        throw new Error('[sharedom]: Format option must be "png", "jpeg", or "webp".');
     }
 }
 

@@ -14,7 +14,7 @@ export function renderUsage(container: HTMLElement): void {
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabBasic,
       filename: 'client-basic.ts',
-      getCode: (t: ReturnType<typeof getT>) => `import { capture } from 'snapdom';
+      getCode: (t: ReturnType<typeof getT>) => `import { capture } from 'sharedom';
 
 ${t.usage.commentBasic1}
 const dataUrl = await capture('#playground-card');
@@ -26,7 +26,7 @@ if (image) image.src = dataUrl;`,
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabOptions,
       filename: 'client-options.ts',
-      getCode: (t: ReturnType<typeof getT>) => `import { capture } from 'snapdom';
+      getCode: (t: ReturnType<typeof getT>) => `import { capture } from 'sharedom';
 
 ${t.usage.commentOptions}
 const dataUrl = await capture('#hero-section', {
@@ -38,7 +38,7 @@ const dataUrl = await capture('#hero-section', {
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabDownload,
       filename: 'client-download.ts',
-      getCode: (t: ReturnType<typeof getT>) => `import { downloadCapture } from 'snapdom';
+      getCode: (t: ReturnType<typeof getT>) => `import { downloadCapture } from 'sharedom';
 
 ${t.usage.commentDownload}
 await downloadCapture('#report-table', 'analytics-report.png', {
@@ -74,7 +74,7 @@ if (img) img.src = imageUrl;`,
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabNextjs,
       filename: 'app/api/screenshot/route.ts',
-      getCode: () => `import { captureSSR } from 'snapdom/ssr';
+      getCode: () => `import { captureSSR } from 'sharedom/ssr';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -92,12 +92,12 @@ export async function POST(request: Request) {
       'Cache-Control': 'public, max-age=31536000, immutable',
     },
   });
-}`,
+} `,
     },
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabSvelte,
       filename: 'src/routes/api/screenshot/+server.ts',
-      getCode: () => `import { captureSSR } from 'snapdom/ssr';
+      getCode: () => `import { captureSSR } from 'sharedom/ssr';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -119,7 +119,7 @@ export const POST: RequestHandler = async ({ request }) => {
     {
       getLabel: (t: ReturnType<typeof getT>) => t.usage.subTabNode,
       filename: 'server.ts',
-      getCode: () => `import { captureSSR } from 'snapdom/ssr';
+      getCode: () => `import { captureSSR } from 'sharedom/ssr';
 import express from 'express';
 
 const app = express();

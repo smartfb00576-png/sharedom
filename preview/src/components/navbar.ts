@@ -9,8 +9,8 @@ export function renderNavbar(container: HTMLElement): void {
     container.innerHTML = `
       <nav class="nav ${isScrolled ? 'scrolled' : ''}" id="mainNav">
         <a href="#" class="nav-logo">
-          <img src="./assets/logo.svg" alt="SnapDOM logo" class="nav-logo-img" width="32" height="32" />
-          <span class="nav-logo-text">SnapDOM</span>
+          <img src="./assets/logo.svg" alt="ShareDOM logo" class="nav-logo-img" width="32" height="32" />
+          <span class="nav-logo-text">ShareDOM</span>
         </a>
 
         <div class="nav-links">

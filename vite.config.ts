@@ -13,10 +13,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'snapdom/ssr': new URL('./src/ssr.ts', import.meta.url).pathname,
-      'snapdom': new URL('./src/index.ts', import.meta.url).pathname,
-      'domsnap/ssr': new URL('./src/ssr.ts', import.meta.url).pathname,
-      'domsnap': new URL('./src/index.ts', import.meta.url).pathname,
+      'sharedom/ssr': new URL('./src/ssr.ts', import.meta.url).pathname,
+      'sharedom': new URL('./src/index.ts', import.meta.url).pathname,
     },
   },
 });

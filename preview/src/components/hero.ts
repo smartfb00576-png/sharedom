@@ -62,7 +62,7 @@ export function renderHero(container: HTMLElement): void {
     `;
 
     document.getElementById('copyNpmBtn')?.addEventListener('click', () => {
-      navigator.clipboard.writeText('npm i snapdom');
+      navigator.clipboard.writeText('npm i sharedom');
       showToast(t.toast.copiedNpm);
     });
 

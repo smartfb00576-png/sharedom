@@ -1,5 +1,5 @@
 export const en = {
-  metaTitle: 'SnapDOM — Screenshot anything in the browser & server',
+  metaTitle: 'ShareDOM — Screenshot anything in the browser & server',
   nav: {
     features: 'Features',
     playground: 'Playground',
@@ -13,7 +13,7 @@ export const en = {
     titleEnd: 'in the browser & server.',
     subtitle: 'Zero-dependency library to capture pixel-perfect DOM snapshots in the browser or render ultra-high-definition screenshots in Next.js & SvelteKit SSR servers.',
     readDocs: 'Read Docs',
-    copyCommand: 'npm i snapdom',
+    copyCommand: 'npm i sharedom',
   },
   mockup: {
     url: 'localhost:5173',
@@ -28,7 +28,7 @@ export const en = {
     cardStat1Val: 'SVG + Canvas',
     cardStat2Label: 'Performance',
     cardStat2Val: '&lt; 4 kB Gzipped',
-    cardQuote: 'SnapDOM captures styled DOM elements cleanly and reliably.',
+    cardQuote: 'sharedom captures styled DOM elements cleanly and reliably.',
     scaleLabel: 'Scale Factor:',
     formatLabel: 'Format:',
     qualityLabel: 'Quality:',
@@ -53,7 +53,7 @@ export const en = {
     f5Title: 'CORS & Image Inlining',
     f5Desc: 'Automatically converts nested images into Base64 to prevent canvas tainting.',
     f6Title: 'TypeScript First',
-    f6Desc: 'Complete type definitions included for SnapDOM and snapdom/ssr.',
+    f6Desc: 'Complete type definitions included for sharedom and sharedom/ssr.',
   },
   usage: {
     title: 'Usage Guide',
@@ -83,6 +83,6 @@ export const en = {
     by: 'by',
   },
   toast: {
-    copiedNpm: 'Copied: npm i snapdom',
+    copiedNpm: 'Copied: npm i sharedom',
   },
 };

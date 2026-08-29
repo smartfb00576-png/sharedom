@@ -34,7 +34,7 @@ export async function captureSSR(
     } = options;
 
     if (!htmlOrUrl || typeof htmlOrUrl !== 'string') {
-        throw new Error('[snapdom/ssr]: htmlOrUrl must be a non-empty string.');
+        throw new Error('[sharedom/ssr]: htmlOrUrl must be a non-empty string.');
     }
 
     if (delay > 0) {

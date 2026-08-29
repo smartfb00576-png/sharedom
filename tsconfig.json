@@ -6,8 +6,8 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "snapdom": ["./src/index.ts"],
-      "snapdom/ssr": ["./src/ssr.ts"]
+      "sharedom": ["./src/index.ts"],
+      "sharedom/ssr": ["./src/ssr.ts"]
     },
     "lib": [
       "DOM",
