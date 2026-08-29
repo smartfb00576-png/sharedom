@@ -121,6 +121,16 @@ export function renderPlayground(container: HTMLElement): void {
 
   function bindEvents(): void {
     const t = getT();
+    const controlsContainer = container.querySelector<HTMLElement>('.controls-container');
+    if (controlsContainer) {
+      controlsContainer.addEventListener('mousemove', (e) => {
+        const rect = controlsContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        controlsContainer.style.setProperty('--ctrl-mouse-x', `${x}px`);
+        controlsContainer.style.setProperty('--ctrl-mouse-y', `${y}px`);
+      });
+    }
 
     document.querySelectorAll('#scaleGroup .btn-opt').forEach((btn) => {
       btn.addEventListener('click', () => {
