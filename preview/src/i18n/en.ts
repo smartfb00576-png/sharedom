@@ -5,6 +5,7 @@ export const en = {
     features: 'Features',
     playground: 'Playground',
     usage: 'Usage',
+    npm: 'NPM ↗',
     github: 'GitHub ↗',
     getStarted: 'Get Started',
   },

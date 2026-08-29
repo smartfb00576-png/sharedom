@@ -5,6 +5,7 @@ export const es = {
     features: 'Características',
     playground: 'Playground',
     usage: 'Guía y SSR',
+    npm: 'NPM ↗',
     github: 'GitHub ↗',
     getStarted: 'Comenzar',
   },

@@ -143,4 +143,16 @@ test.describe('ShareDOM E2E Visual & Functional Suite', () => {
     await expect(toast).toBeVisible();
     await expect(toast).toContainText('sharedom');
   });
+
+  test('8. Should have valid NPM package links in navbar and footer', async ({ page }) => {
+    const navNpmLink = page.locator('#mainNav .nav-links a[href*="npmjs.com"]');
+    await expect(navNpmLink).toBeVisible();
+    await expect(navNpmLink).toHaveAttribute('href', 'https://www.npmjs.com/package/sharedom');
+    await expect(navNpmLink).toHaveAttribute('target', '_blank');
+
+    const footerNpmLink = page.locator('footer .footer-links a[href*="npmjs.com"]');
+    await expect(footerNpmLink).toBeVisible();
+    await expect(footerNpmLink).toHaveAttribute('href', 'https://www.npmjs.com/package/sharedom');
+    await expect(footerNpmLink).toHaveAttribute('target', '_blank');
+  });
 });
