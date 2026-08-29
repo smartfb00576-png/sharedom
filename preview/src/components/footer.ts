@@ -1,4 +1,5 @@
 import { getT, onLanguageChange } from '../i18n';
+import logoUrl from '../../assets/logo.svg';
 
 export function renderFooter(container: HTMLElement): void {
   function update(): void {
@@ -8,7 +9,7 @@ export function renderFooter(container: HTMLElement): void {
     container.innerHTML = `
       <footer>
         <div class="footer-logo">
-          <img src="./assets/logo.svg" alt="ShareDOM logo" width="20" height="20" />
+          <img src="${logoUrl}" alt="ShareDOM logo" width="20" height="20" />
           <span class="logo-name">ShareDOM</span>
         </div>
         <span class="footer-license">

@@ -1,4 +1,5 @@
 import { getT, getLanguage, setLanguage, onLanguageChange } from '../i18n';
+import logoUrl from '../../assets/logo.svg';
 
 export function renderNavbar(container: HTMLElement): void {
   function update(): void {
@@ -9,7 +10,7 @@ export function renderNavbar(container: HTMLElement): void {
     container.innerHTML = `
       <nav class="nav ${isScrolled ? 'scrolled' : ''}" id="mainNav">
         <a href="#" class="nav-logo">
-          <img src="./assets/logo.svg" alt="ShareDOM logo" class="nav-logo-img" width="32" height="32" />
+          <img src="${logoUrl}" alt="ShareDOM logo" class="nav-logo-img" width="32" height="32" />
           <span class="nav-logo-text">ShareDOM</span>
         </a>
 

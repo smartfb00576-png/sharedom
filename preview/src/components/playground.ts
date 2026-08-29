@@ -2,6 +2,7 @@ import { getT, onLanguageChange } from '../i18n';
 import { capture, downloadCapture, CaptureOptions } from 'sharedom';
 import { showToast } from './toast';
 import { playCameraShutterSound } from '../utils/audio';
+import logoUrl from '../../assets/logo.svg';
 
 export function renderPlayground(container: HTMLElement): void {
   let currentScale = 2;
@@ -26,7 +27,7 @@ export function renderPlayground(container: HTMLElement): void {
               <div class="card-top">
                 <div class="card-brand">
                   <div class="brand-avatar">
-                    <img src="./assets/logo.svg" alt="sharedom logo" width="24" height="24" />
+                    <img src="${logoUrl}" alt="sharedom logo" width="24" height="24" />
                   </div>
                   <div>
                     <h4>${t.playground.cardTitle}</h4>
