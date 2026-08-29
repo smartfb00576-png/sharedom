@@ -12,7 +12,7 @@ export const es = {
     titleEnd: 'en el navegador y servidor.',
     subtitle: 'Librería ligera para capturar snapshots del DOM en el navegador o renderizar capturas de ultra alta fidelidad en servidores SSR con Next.js y SvelteKit.',
     readDocs: 'Ver Documentación',
-    copyCommand: 'npm i domsnap',
+    copyCommand: 'npm i snapdom',
   },
   mockup: {
     url: 'localhost:5173',
@@ -27,7 +27,7 @@ export const es = {
     cardStat1Val: 'SVG + Canvas',
     cardStat2Label: 'Rendimiento',
     cardStat2Val: '&lt; 4 kB Gzipped',
-    cardQuote: 'domsnap captura elementos estilizados del DOM de forma limpia y confiable.',
+    cardQuote: 'snapdom captura elementos estilizados del DOM de forma limpia y confiable.',
     scaleLabel: 'Factor de Escala:',
     formatLabel: 'Formato:',
     qualityLabel: 'Calidad:',
@@ -52,7 +52,7 @@ export const es = {
     f5Title: 'Manejo de CORS e Imágenes',
     f5Desc: 'Convierte automáticamente imágenes anidadas a Base64 para no contaminar el canvas.',
     f6Title: 'TypeScript Nativo',
-    f6Desc: 'Tipado completo para domsnap y domsnap/ssr sin dependencias externas.',
+    f6Desc: 'Tipado completo para snapdom y snapdom/ssr sin dependencias externas.',
   },
   usage: {
     title: 'Guía de Uso y Ejemplos',
@@ -82,6 +82,6 @@ export const es = {
     by: 'por',
   },
   toast: {
-    copiedNpm: 'Copiado: npm i domsnap',
+    copiedNpm: 'Copiado: npm i snapdom',
   },
 };

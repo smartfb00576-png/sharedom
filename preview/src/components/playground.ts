@@ -1,5 +1,5 @@
 import { getT, onLanguageChange } from '../i18n';
-import { capture, downloadCapture, CaptureOptions } from 'domsnap';
+import { capture, downloadCapture, CaptureOptions } from 'snapdom';
 import { showToast } from './toast';
 import { playCameraShutterSound } from '../utils/audio';
 
@@ -26,7 +26,7 @@ export function renderPlayground(container: HTMLElement): void {
               <div class="card-top">
                 <div class="card-brand">
                   <div class="brand-avatar">
-                    <img src="./assets/logo.svg" alt="domsnap logo" width="24" height="24" />
+                    <img src="./assets/logo.svg" alt="snapdom logo" width="24" height="24" />
                   </div>
                   <div>
                     <h4>${t.playground.cardTitle}</h4>
@@ -190,7 +190,7 @@ export function renderPlayground(container: HTMLElement): void {
       btnDownload.disabled = true;
 
       try {
-        const filename = `domsnap-${Date.now()}.${currentFormat}`;
+        const filename = `snapdom-${Date.now()}.${currentFormat}`;
         await downloadCapture(targetElement, filename, getOptions());
       } catch (err) {
         showToast(`${t.playground.failedCapture}: ${(err as Error).message}`);

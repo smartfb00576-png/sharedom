@@ -19,7 +19,7 @@ export function renderSvgToCanvas(
 
             const context = canvas.getContext('2d', { willReadFrequently: true });
             if (!context) {
-                return reject(new Error('[domsnap]: Could not obtain 2D canvas context.'));
+                return reject(new Error('[snapdom]: Could not obtain 2D canvas context.'));
             }
 
             context.imageSmoothingEnabled = true;
@@ -43,12 +43,12 @@ export function renderSvgToCanvas(
                     resolve(dataUrl);
                 }
             } catch (error) {
-                reject(new Error(`[domsnap]: Failed to export canvas image. ${error}`));
+                reject(new Error(`[snapdom]: Failed to export canvas image. ${error}`));
             }
         };
 
         image.onerror = (error) => {
-            reject(new Error(`[domsnap]: Failed to load rendered SVG image. ${error}`));
+            reject(new Error(`[snapdom]: Failed to load rendered SVG image. ${error}`));
         };
 
         image.src = svgDataUrl;

@@ -6,7 +6,7 @@ export type Translations = typeof en;
 
 const translations: Record<Language, Translations> = { en, es };
 
-let currentLang: Language = (localStorage.getItem('domsnap_lang') as Language) || 'en';
+let currentLang: Language = (localStorage.getItem('snapdom_lang') as Language) || 'en';
 
 type Listener = (lang: Language, t: Translations) => void;
 const listeners = new Set<Listener>();
@@ -21,7 +21,7 @@ export function getT(): Translations {
 
 export function setLanguage(lang: Language): void {
   currentLang = lang;
-  localStorage.setItem('domsnap_lang', lang);
+  localStorage.setItem('snapdom_lang', lang);
   document.documentElement.lang = lang;
   listeners.forEach((listener) => listener(currentLang, translations[currentLang]));
 }

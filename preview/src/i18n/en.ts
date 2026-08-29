@@ -12,7 +12,7 @@ export const en = {
     titleEnd: 'in the browser & server.',
     subtitle: 'Zero-dependency library to capture pixel-perfect DOM snapshots in the browser or render ultra-high-definition screenshots in Next.js & SvelteKit SSR servers.',
     readDocs: 'Read Docs',
-    copyCommand: 'npm i domsnap',
+    copyCommand: 'npm i snapdom',
   },
   mockup: {
     url: 'localhost:5173',
@@ -27,7 +27,7 @@ export const en = {
     cardStat1Val: 'SVG + Canvas',
     cardStat2Label: 'Performance',
     cardStat2Val: '&lt; 4 kB Gzipped',
-    cardQuote: 'domsnap captures styled DOM elements cleanly and reliably.',
+    cardQuote: 'snapdom captures styled DOM elements cleanly and reliably.',
     scaleLabel: 'Scale Factor:',
     formatLabel: 'Format:',
     qualityLabel: 'Quality:',
@@ -52,7 +52,7 @@ export const en = {
     f5Title: 'CORS & Image Inlining',
     f5Desc: 'Automatically converts nested images into Base64 to prevent canvas tainting.',
     f6Title: 'TypeScript First',
-    f6Desc: 'Complete type definitions included for domsnap and domsnap/ssr.',
+    f6Desc: 'Complete type definitions included for snapdom and snapdom/ssr.',
   },
   usage: {
     title: 'Usage Guide',
@@ -82,6 +82,6 @@ export const en = {
     by: 'by',
   },
   toast: {
-    copiedNpm: 'Copied: npm i domsnap',
+    copiedNpm: 'Copied: npm i snapdom',
   },
 };

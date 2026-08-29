@@ -1,5 +1,5 @@
 {
-  "name": "domsnap",
+  "name": "snapdom",
   "version": "1.0.0",
   "description": "Fast and lightweight DOM snapshot and screenshot capture library for browser and SSR.",
   "type": "module",
@@ -32,7 +32,7 @@
     "release:major": "npm version major && npm publish"
   },
   "keywords": [
-    "domsnap",
+    "snapdom",
     "dom",
     "snapshot",
     "screenshot",

@@ -1,15 +1,15 @@
-# domsnap
+# snapdom
 
 Fast and lightweight DOM snapshot and screenshot capture library for the browser and SSR (Node.js, Next.js, SvelteKit).
 
-`domsnap` allows you to capture any HTML element into a high-quality image (PNG, JPEG, or WebP) directly in the browser or render server-side snapshots with zero runtime dependencies.
+`snapdom` allows you to capture any HTML element into a high-quality image (PNG, JPEG, or WebP) directly in the browser or render server-side snapshots with zero runtime dependencies.
 
 ---
 
 ## Features
 
 - ⚡ **Lightweight & Fast**: Uses native browser APIs (`XMLSerializer`, SVG `foreignObject`, and `HTMLCanvasElement`).
-- 🌐 **SSR First-Class Support**: Dedicated `domsnap/ssr` module for Next.js Route Handlers and SvelteKit endpoints.
+- 🌐 **SSR First-Class Support**: Dedicated `snapdom/ssr` module for Next.js Route Handlers and SvelteKit endpoints.
 - 🎨 **Accurate Styles**: Automatically copies computed styles from source elements.
 - 🔍 **High-DPI Support**: Configurable scale factor for crisp Retina / 4K snapshots.
 - 🖼️ **Multiple Formats**: Export to PNG (with transparency), JPEG, or WebP.
@@ -22,15 +22,15 @@ Fast and lightweight DOM snapshot and screenshot capture library for the browser
 ## Installation
 
 ```bash
-npm install domsnap
+npm install snapdom
 ```
 
 Or with your preferred package manager:
 
 ```bash
-pnpm add domsnap
+pnpm add snapdom
 # or
-yarn add domsnap
+yarn add snapdom
 ```
 
 ---
@@ -40,7 +40,7 @@ yarn add domsnap
 ### 1. Capture as an Optimized Base64 Data URL
 
 ```typescript
-import { capture } from 'domsnap';
+import { capture } from 'snapdom';
 
 // Capture by CSS selector
 const dataUrl = await capture('#my-card', {
@@ -56,7 +56,7 @@ if (imageElement) imageElement.src = dataUrl;
 ### 2. Direct Download
 
 ```typescript
-import { downloadCapture } from 'domsnap';
+import { downloadCapture } from 'snapdom';
 
 // Pass element reference or selector and filename
 await downloadCapture('#my-card', 'card-snapshot.png', {
@@ -92,7 +92,7 @@ const imageUrl = URL.createObjectURL(blob);
 
 ```typescript
 // app/api/screenshot/route.ts
-import { captureSSR } from 'domsnap/ssr';
+import { captureSSR } from 'snapdom/ssr';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
 
 ```typescript
 // src/routes/api/screenshot/+server.ts
-import { captureSSR } from 'domsnap/ssr';
+import { captureSSR } from 'snapdom/ssr';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -141,7 +141,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 ## API Reference
 
-### Client: `domsnap`
+### Client: `snapdom`
 
 #### `capture(target, options?)`
 Captures a DOM element and returns a Promise resolving to an optimized base64 Data URL.
@@ -167,7 +167,7 @@ Captures a DOM element and triggers a browser download.
 
 ---
 
-### SSR: `domsnap/ssr`
+### SSR: `snapdom/ssr`
 
 #### `captureSSR(htmlOrUrl, options?)`
 Captures an HTML string or URL on the server and returns a `Promise<Uint8Array>`.

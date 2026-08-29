@@ -14,10 +14,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      'snapdom/ssr': path.resolve(__dirname, 'src/ssr.ts'),
+      'snapdom': path.resolve(__dirname, 'src/index.ts'),
       'domsnap/ssr': path.resolve(__dirname, 'src/ssr.ts'),
       'domsnap': path.resolve(__dirname, 'src/index.ts'),
-      '@domsnap/core/ssr': path.resolve(__dirname, 'src/ssr.ts'),
-      '@domsnap/core': path.resolve(__dirname, 'src/index.ts'),
     },
   },
 });
