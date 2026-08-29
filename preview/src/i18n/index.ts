@@ -8,6 +8,11 @@ const translations: Record<Language, Translations> = { en, es };
 
 let currentLang: Language = (localStorage.getItem('snapdom_lang') as Language) || 'en';
 
+if (typeof document !== 'undefined') {
+  document.title = translations[currentLang].metaTitle;
+  document.documentElement.lang = currentLang;
+}
+
 type Listener = (lang: Language, t: Translations) => void;
 const listeners = new Set<Listener>();
 
@@ -23,6 +28,7 @@ export function setLanguage(lang: Language): void {
   currentLang = lang;
   localStorage.setItem('snapdom_lang', lang);
   document.documentElement.lang = lang;
+  document.title = translations[currentLang].metaTitle;
   listeners.forEach((listener) => listener(currentLang, translations[currentLang]));
 }
 

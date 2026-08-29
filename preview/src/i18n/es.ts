@@ -1,4 +1,5 @@
 export const es = {
+  metaTitle: 'SnapDOM — Captura cualquier elemento en el navegador y servidor',
   nav: {
     features: 'Características',
     playground: 'Playground',
@@ -27,7 +28,7 @@ export const es = {
     cardStat1Val: 'SVG + Canvas',
     cardStat2Label: 'Rendimiento',
     cardStat2Val: '&lt; 4 kB Gzipped',
-    cardQuote: 'snapdom captura elementos estilizados del DOM de forma limpia y confiable.',
+    cardQuote: 'SnapDOM captura elementos estilizados del DOM de forma limpia y confiable.',
     scaleLabel: 'Factor de Escala:',
     formatLabel: 'Formato:',
     qualityLabel: 'Calidad:',
@@ -52,7 +53,7 @@ export const es = {
     f5Title: 'Manejo de CORS e Imágenes',
     f5Desc: 'Convierte automáticamente imágenes anidadas a Base64 para no contaminar el canvas.',
     f6Title: 'TypeScript Nativo',
-    f6Desc: 'Tipado completo para snapdom y snapdom/ssr sin dependencias externas.',
+    f6Desc: 'Tipado completo para SnapDOM y snapdom/ssr sin dependencias externas.',
   },
   usage: {
     title: 'Guía de Uso y Ejemplos',

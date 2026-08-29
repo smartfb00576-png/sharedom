@@ -1,4 +1,5 @@
 export const en = {
+  metaTitle: 'SnapDOM — Screenshot anything in the browser & server',
   nav: {
     features: 'Features',
     playground: 'Playground',
@@ -27,7 +28,7 @@ export const en = {
     cardStat1Val: 'SVG + Canvas',
     cardStat2Label: 'Performance',
     cardStat2Val: '&lt; 4 kB Gzipped',
-    cardQuote: 'snapdom captures styled DOM elements cleanly and reliably.',
+    cardQuote: 'SnapDOM captures styled DOM elements cleanly and reliably.',
     scaleLabel: 'Scale Factor:',
     formatLabel: 'Format:',
     qualityLabel: 'Quality:',
@@ -52,7 +53,7 @@ export const en = {
     f5Title: 'CORS & Image Inlining',
     f5Desc: 'Automatically converts nested images into Base64 to prevent canvas tainting.',
     f6Title: 'TypeScript First',
-    f6Desc: 'Complete type definitions included for snapdom and snapdom/ssr.',
+    f6Desc: 'Complete type definitions included for SnapDOM and snapdom/ssr.',
   },
   usage: {
     title: 'Usage Guide',
