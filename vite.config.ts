@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import path from 'path';
 
 export default defineConfig({
   root: 'preview',
@@ -14,10 +13,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'snapdom/ssr': path.resolve(__dirname, 'src/ssr.ts'),
-      'snapdom': path.resolve(__dirname, 'src/index.ts'),
-      'domsnap/ssr': path.resolve(__dirname, 'src/ssr.ts'),
-      'domsnap': path.resolve(__dirname, 'src/index.ts'),
+      'snapdom/ssr': new URL('./src/ssr.ts', import.meta.url).pathname,
+      'snapdom': new URL('./src/index.ts', import.meta.url).pathname,
+      'domsnap/ssr': new URL('./src/ssr.ts', import.meta.url).pathname,
+      'domsnap': new URL('./src/index.ts', import.meta.url).pathname,
     },
   },
 });
