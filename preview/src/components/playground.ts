@@ -178,7 +178,7 @@ export function renderPlayground(container: HTMLElement): void {
           }
         };
 
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (err) {
         showToast(`${t.playground.failedCapture}: ${(err as Error).message}`);
       } finally {
