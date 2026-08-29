@@ -44,11 +44,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Erickgiber/domsnap.git"
+    "url": "git+https://github.com/Erickgiber/sharedom.git"
   },
-  "homepage": "https://erickgiber.github.io/domsnap/",
+  "homepage": "https://erickgiber.github.io/sharedom/",
   "bugs": {
-    "url": "https://github.com/Erickgiber/domsnap/issues"
+    "url": "https://github.com/Erickgiber/sharedom/issues"
   },
   "author": "Erickgiber",
   "license": "MIT",
