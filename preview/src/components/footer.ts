@@ -1,5 +1,5 @@
 import { getT, onLanguageChange } from '../i18n';
-import logoUrl from '../../assets/logo.svg';
+import logoUrl from '../../public/logo.svg';
 
 export function renderFooter(container: HTMLElement): void {
   function update(): void {

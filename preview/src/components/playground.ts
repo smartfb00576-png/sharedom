@@ -2,7 +2,7 @@ import { getT, onLanguageChange } from '../i18n';
 import { capture, downloadCapture, CaptureOptions } from 'sharedom';
 import { showToast } from './toast';
 import { playCameraShutterSound } from '../utils/audio';
-import logoUrl from '../../assets/logo.svg';
+import logoUrl from '../../public/logo.svg';
 
 export function renderPlayground(container: HTMLElement): void {
   let currentScale = 2;
