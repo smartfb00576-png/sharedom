@@ -1,6 +1,6 @@
 {
   "name": "sharedom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast and lightweight DOM snapshot and screenshot capture library for browser and SSR.",
   "type": "module",
   "main": "./dist/index.cjs",
