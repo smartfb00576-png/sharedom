@@ -172,7 +172,6 @@ export function renderPlayground(container: HTMLElement): void {
       try {
         const dataUrl = await capture(targetElement, getOptions());
         lastDataUrl = dataUrl;
-        resultImg.src = dataUrl;
         resultSection.style.display = 'block';
 
         if (playImgFrame) {
@@ -181,15 +180,27 @@ export function renderPlayground(container: HTMLElement): void {
           playImgFrame.classList.add('photo-pop');
         }
 
-        resultImg.onload = () => {
+        let handled = false;
+        const onImageReady = () => {
+          if (handled) return;
+          handled = true;
           const approxBytes = Math.round((dataUrl.length * 3) / 4);
           const sizeKb = (approxBytes / 1024).toFixed(1);
           if (resultMeta) {
             resultMeta.textContent = `${resultImg.naturalWidth} × ${resultImg.naturalHeight}px (${currentScale}x, ${currentFormat.toUpperCase()}, ~${sizeKb} KB)`;
           }
+
+          requestAnimationFrame(() => {
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
         };
 
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        resultImg.addEventListener('load', onImageReady, { once: true });
+        resultImg.src = dataUrl;
+
+        if (resultImg.complete && resultImg.naturalWidth > 0) {
+          onImageReady();
+        }
       } catch (err) {
         showToast(`${t.playground.failedCapture}: ${(err as Error).message}`);
       } finally {
