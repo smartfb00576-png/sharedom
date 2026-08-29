@@ -64,12 +64,14 @@ export function renderFeatures(container: HTMLElement): void {
             <div class="feature-desc">${t.features.f4Desc}</div>
           </div>
 
-          <!-- 5. CORS & Image Inlining -->
+          <!-- 5. CORS & Image Inlining (Fixed Clean Dual-Arrow SVG) -->
           <div class="feature-card anim-in" style="transition-delay:320ms" data-anim-key="feat-5">
             <div class="feature-icon-box">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.5 2v6h-6"></path>
-                <path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+                <path d="M16 16h5v5"></path>
               </svg>
             </div>
             <div class="feature-title">${t.features.f5Title}</div>
@@ -90,6 +92,72 @@ export function renderFeatures(container: HTMLElement): void {
         </div>
       </section>
     `;
+
+    bind3dFeatureCards();
+  }
+
+  function bind3dFeatureCards(): void {
+    const cards = container.querySelectorAll<HTMLElement>('.feature-card');
+    cards.forEach((card) => {
+      let rafId = 0;
+      let targetRotateX = 0;
+      let targetRotateY = 0;
+      let currentRotateX = 0;
+      let currentRotateY = 0;
+      let isHovered = false;
+
+      function updateTilt(): void {
+        currentRotateX += (targetRotateX - currentRotateX) * 0.12;
+        currentRotateY += (targetRotateY - currentRotateY) * 0.12;
+
+        const scale = isHovered ? 1.025 : 1;
+        card.style.transform = `perspective(700px) rotateX(${currentRotateX.toFixed(2)}deg) rotateY(${currentRotateY.toFixed(2)}deg) scale3d(${scale}, ${scale}, ${scale})`;
+
+        if (
+          isHovered ||
+          Math.abs(targetRotateX - currentRotateX) > 0.05 ||
+          Math.abs(targetRotateY - currentRotateY) > 0.05
+        ) {
+          rafId = requestAnimationFrame(updateTilt);
+        }
+      }
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const deltaX = (x - centerX) / centerX;
+        const deltaY = (y - centerY) / centerY;
+
+        const maxTilt = 8;
+        targetRotateY = deltaX * maxTilt;
+        targetRotateX = -deltaY * maxTilt;
+
+        card.style.setProperty('--mouse-x', `${((x / rect.width) * 100).toFixed(1)}%`);
+        card.style.setProperty('--mouse-y', `${((y / rect.height) * 100).toFixed(1)}%`);
+
+        if (!isHovered) {
+          isHovered = true;
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(updateTilt);
+        }
+      });
+
+      card.addEventListener('mouseenter', () => {
+        isHovered = true;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(updateTilt);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        isHovered = false;
+        targetRotateX = 0;
+        targetRotateY = 0;
+      });
+    });
   }
 
   update();
