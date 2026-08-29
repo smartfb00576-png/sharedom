@@ -42,7 +42,15 @@
     "nextjs",
     "sveltekit"
   ],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Erickgiber/domsnap.git"
+  },
+  "homepage": "https://erickgiber.github.io/domsnap/",
+  "bugs": {
+    "url": "https://github.com/Erickgiber/domsnap/issues"
+  },
+  "author": "Erickgiber",
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.3.6",
