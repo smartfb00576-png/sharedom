@@ -1,0 +1,52 @@
+{
+  "name": "domsnap",
+  "version": "1.0.0",
+  "description": "Fast and lightweight DOM snapshot and screenshot capture library for browser and SSR.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./ssr": {
+      "types": "./dist/ssr.d.ts",
+      "import": "./dist/ssr.js",
+      "require": "./dist/ssr.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsup src/index.ts src/ssr.ts --format esm,cjs --dts --clean",
+    "build:preview": "vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
+  "keywords": [
+    "domsnap",
+    "dom",
+    "snapshot",
+    "screenshot",
+    "ssr",
+    "canvas",
+    "svg",
+    "nextjs",
+    "sveltekit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}
