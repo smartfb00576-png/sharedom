@@ -1,5 +1,6 @@
 export const en = {
   metaTitle: 'ShareDOM — Screenshot anything in the browser & server',
+  metaDescription: 'Fast, zero-dependency DOM snapshot and screenshot capture library for the browser and SSR (Next.js, SvelteKit, Node.js). Export high-DPI Retina images to PNG, JPEG, and WebP.',
   nav: {
     features: 'Features',
     playground: 'Playground',

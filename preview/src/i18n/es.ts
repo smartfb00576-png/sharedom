@@ -1,5 +1,6 @@
 export const es = {
   metaTitle: 'ShareDOM — Captura cualquier elemento en el navegador y servidor',
+  metaDescription: 'Librería ligera y con cero dependencias para capturar snapshots y screenshots pixel-perfect del DOM en el navegador y SSR con Next.js y SvelteKit.',
   nav: {
     features: 'Características',
     playground: 'Playground',
