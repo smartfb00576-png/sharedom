@@ -179,6 +179,7 @@ app.post('/api/snap', async (req, res) => {
             activeSsrTab = tabIdx;
           }
           updateCodeBlockOnly();
+          (tabBtn as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
         });
       });
     }
@@ -189,6 +190,63 @@ app.post('/api/snap', async (req, res) => {
 
     const pre = container.querySelector('pre');
     if (pre) pre.innerHTML = highlightedRows;
+  }
+
+  function enableDragScroll(element: HTMLElement | null): () => void {
+    if (!element) return () => {};
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let isDragging = false;
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      isDown = true;
+      isDragging = false;
+      startX = e.pageX - element.offsetLeft;
+      scrollLeft = element.scrollLeft;
+      element.classList.add('is-dragging');
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - element.offsetLeft;
+      const walk = x - startX;
+      if (Math.abs(walk) > 4) {
+        isDragging = true;
+      }
+      element.scrollLeft = scrollLeft - walk;
+    };
+
+    const onMouseUp = () => {
+      if (!isDown) return;
+      isDown = false;
+      element.classList.remove('is-dragging');
+      setTimeout(() => {
+        isDragging = false;
+      }, 50);
+    };
+
+    const onClickCapture = (e: MouseEvent) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    element.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    element.addEventListener('click', onClickCapture, true);
+
+    return () => {
+      element.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      element.removeEventListener('click', onClickCapture, true);
+    };
   }
 
   function renderFull(): void {
@@ -262,6 +320,9 @@ app.post('/api/snap', async (req, res) => {
       obs.observe(usageEl);
     }
 
+    enableDragScroll(document.getElementById('usageSubTabs'));
+    enableDragScroll(document.getElementById('usageSegmentPill'));
+
     document.querySelectorAll('#usageSegmentPill .segment-btn').forEach((segBtn) => {
       segBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -280,6 +341,7 @@ app.post('/api/snap', async (req, res) => {
           activeSsrTab = tabIdx;
         }
         updateCodeBlockOnly();
+        (tabBtn as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       });
     });
 

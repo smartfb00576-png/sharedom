@@ -1069,15 +1069,36 @@ h1 em {
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
+  max-width: 100%;
 }
 
 .segment-pill {
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border);
   padding: 4px;
   border-radius: 999px;
   gap: 4px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.segment-pill.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.segment-pill::-webkit-scrollbar {
+  display: none;
 }
 
 .segment-btn {
@@ -1090,6 +1111,10 @@ h1 em {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .segment-btn.active {
@@ -1129,17 +1154,29 @@ h1 em {
 
 .tabs {
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
   gap: 6px;
-  padding: 4px;
+  padding: 5px;
   border-radius: 0.875rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
-  width: fit-content;
-  margin: 0 auto 1.25rem;
+  width: max-content;
   max-width: 100%;
+  margin: 0 auto 1.25rem;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  touch-action: pan-x;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.tabs.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
 }
 
 .tabs::-webkit-scrollbar {
@@ -1147,9 +1184,10 @@ h1 em {
 }
 
 .tab {
-  padding: 0.4rem 1.1rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 0.625rem;
   font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   border: none;
   background: transparent;
@@ -1157,6 +1195,9 @@ h1 em {
   transition: background 0.2s, color 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .tab.active {
@@ -1491,30 +1532,39 @@ footer {
 
   .usage-segment-row {
     margin-bottom: 1rem;
+    justify-content: center;
+    width: 100%;
   }
 
   .segment-pill {
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    max-width: 100%;
+    justify-content: flex-start;
+    padding: 4px;
   }
 
   .segment-btn {
-    flex: 1;
-    padding: 0.45rem 0.75rem;
+    padding: 0.45rem 1rem;
     font-size: 0.8125rem;
     text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .tabs {
-    width: 100%;
-    justify-content: center;
-    gap: 4px;
-    padding: 3px;
+    width: auto;
+    max-width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 5px;
+    margin-bottom: 1rem;
   }
 
   .tab {
-    padding: 0.35rem 0.85rem;
+    padding: 0.4rem 0.95rem;
     font-size: 0.8125rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   footer {
