@@ -9,6 +9,9 @@
       "sharedom": ["./src/index.ts"],
       "sharedom/ssr": ["./src/ssr.ts"]
     },
+    "types": [
+      "chrome"
+    ],
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -24,6 +27,7 @@
   },
   "include": [
     "src",
+    "extension",
     "preview",
     "vite.config.ts"
   ]

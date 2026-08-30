@@ -45,7 +45,9 @@ export class DomInspector {
           scale = Number(stored.defaultScale);
         }
         if (stored.defaultFormat && !options?.format) {
-          format = stored.defaultFormat;
+          if (stored.defaultFormat === 'png' || stored.defaultFormat === 'jpeg' || stored.defaultFormat === 'webp') {
+            format = stored.defaultFormat;
+          }
         }
       } catch {}
     }
