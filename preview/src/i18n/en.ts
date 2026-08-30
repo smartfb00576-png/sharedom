@@ -7,6 +7,7 @@ export const en = {
     usage: 'Usage',
     npm: 'NPM ↗',
     github: 'GitHub ↗',
+    buyCoffee: '☕ Buy me a coffee',
     getStarted: 'Get Started',
   },
   hero: {

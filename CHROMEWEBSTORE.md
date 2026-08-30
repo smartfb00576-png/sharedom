@@ -1,0 +1,102 @@
+# Chrome Web Store Listing & Submission Guide
+
+*Last Updated: 2026-08-30*
+
+This document contains all official store metadata, permission justifications, privacy disclosures, and step-by-step instructions for publishing `sharedom` to the **Chrome Web Store**.
+
+---
+
+## 1. Store Listing Details
+
+- **Item Name**: `sharedom - DOM Screenshot Inspector`
+- **Summary / Short Description** (≤ 132 chars):
+  `Inspect, select, and capture high-quality screenshots of any DOM element with live preview, copy to clipboard, and instant download.`
+- **Category**: `Developer Tools`
+- **Primary Language**: `English (United States)`
+- **Support / Homepage URL**: `https://github.com/Erickgiber/sharedom`
+
+### Detailed Description (Copy & Paste)
+
+```text
+sharedom is a fast, lightweight developer tool that allows you to inspect and capture clean, high-resolution screenshots of any DOM element directly from your browser.
+
+✨ Key Features:
+• 🎯 Interactive DOM Inspector: Hover over any card, banner, container, or component on any webpage to see real-time bounding box highlights, tag names, CSS classes, and exact pixel dimensions.
+• ⌨️ Full Keyboard Navigation: Traverse parent containers with [↑ Up Arrow] and child elements with [↓ Down Arrow], and capture instantly with [Enter] or [Space].
+• 📋 Copy to Clipboard: Copy high-fidelity PNG image data directly to your system clipboard (via native Clipboard API) to paste immediately into Figma, Slack, Notion, GitHub issues, Discord, or documentation.
+• 💾 High-Resolution Export: Capture at 1x, 2x (Retina HD), or 3x (Ultra HD) resolution in PNG (with alpha transparency), JPEG, or WebP.
+• 🎨 Automatic Background Detection: Automatically detects and applies the computed background color of dark or themed elements, with full manual override options (Transparent, White, Dark, or Custom).
+• 🌐 Bicultural & Multilingual: One-click instant switching between English and Spanish.
+• 🛡️ Shadow DOM Isolation: All extension overlays and controls run in an isolated Shadow DOM container and never conflict with website stylesheets or appear in captured images.
+• ⚡ 100% Client-Side & Private: Zero telemetry, zero tracking, and zero external analytics.
+```
+
+---
+
+## 2. Permissions Justification (Required for Store Review)
+
+When submitting, Chrome Web Store reviewers require a plain-English explanation for every permission requested:
+
+| Permission | Justification for Review Team |
+| :--- | :--- |
+| `activeTab` | Required to inspect DOM elements on the webpage currently open and active when invoked by user gesture (clicking extension icon or pressing shortcut). |
+| `scripting` | Required to inject the isolated inspection content script into the active tab upon user trigger. |
+| `storage` | Required to save user default preferences locally (default resolution scale, preferred image format, language choice). |
+| `contextMenus` | Required to provide a "Inspect & Capture DOM Element" option when right-clicking on elements. |
+| `host_permissions: ["<all_urls>"]` | Required to fetch public cross-origin images nested inside captured DOM elements via background service worker to inline them as Base64 and prevent tainted canvas failures. |
+
+---
+
+## 3. Privacy & Data Handling Declarations
+
+- **Single Purpose**: `A developer utility to inspect and capture screenshots of DOM elements on web pages.`
+- **Data Collection**: `None. The extension does not collect, store, or transmit any user data, personal info, authentication credentials, or browsing history.`
+- **Remote Code**: `None. All code is statically bundled and runs locally in the browser.`
+- **Third-Party Services**: `No third-party trackers, analytics, or external API endpoints are used.`
+
+---
+
+## 4. Visual Assets Checklist
+
+- **Store Icon**: `extension/icons/icon-128.png` (128×128px PNG).
+- **Screenshots**: At least 1 screenshot at `1280×800px` or `640×400px` (showing the DOM inspector highlighting an element and the action modal open).
+- **Small Promo Tile** (Optional): `440×280px`.
+- **Marquee Promo Tile** (Optional): `1400×560px`.
+
+---
+
+## 5. Step-by-Step Submission Process
+
+### Step 1: Package the Extension
+Run the automated packaging script from the repository root:
+```bash
+npm run zip:extension
+```
+This generates `sharedom-extension.zip`.
+
+### Step 2: Open Chrome Developer Dashboard
+1. Go to the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole).
+2. Sign in with your Google account.
+3. If this is your first time, pay the one-time \$5 USD developer registration fee.
+
+### Step 3: Upload the ZIP
+1. Click **"Add new item"** (or **"New Item"**).
+2. Drag and drop `sharedom-extension.zip` or click **"Browse files"** to select it.
+
+### Step 4: Complete Store Listing
+1. In the **"Store Listing"** tab:
+   - Fill in **Description** from Section 1 above.
+   - Select **Category**: *Developer Tools*.
+   - Upload the **128×128 icon** (`extension/icons/icon-128.png`).
+   - Upload at least **1 screenshot** (1280×800).
+2. In the **"Privacy"** tab:
+   - Paste the single purpose description from Section 3.
+   - Enter the permission justifications from Section 2 for `activeTab`, `scripting`, `storage`, `contextMenus`, and `host_permissions`.
+   - Check **"I certify that this extension does not collect or transmit user data"**.
+3. In the **"Distribution"** tab:
+   - Select **Visibility**: *Public* (or *Unlisted* if testing).
+   - Select **Regions**: *All regions*.
+
+### Step 5: Submit for Review
+1. Click **"Submit for Review"**.
+2. Standard review usually takes **24 to 72 hours**. Once approved, it will be live on the Chrome Web Store!

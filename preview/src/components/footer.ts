@@ -13,6 +13,7 @@ export function renderFooter(container: HTMLElement): void {
           <span class="logo-name">ShareDOM</span>
         </div>
         <div class="footer-links">
+          <a href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener" class="footer-coffee-link">☕ ${t.nav.buyCoffee.replace('☕ ', '')}</a>
           <a href="https://www.npmjs.com/package/sharedom" target="_blank" rel="noopener">NPM ↗</a>
           <a href="https://github.com/Erickgiber/sharedom" target="_blank" rel="noopener">GitHub ↗</a>
         </div>

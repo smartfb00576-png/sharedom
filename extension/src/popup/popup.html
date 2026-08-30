@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sharedom - DOM Capture</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="28" height="28" fill="none">
+            <defs>
+              <linearGradient id="popupLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a78bfa" />
+                <stop offset="100%" stop-color="#7c3aed" />
+              </linearGradient>
+            </defs>
+            <rect width="48" height="48" rx="12" fill="url(#popupLogoGrad)" />
+            <rect x="1" y="1" width="46" height="46" rx="11" stroke="rgba(255,255,255,0.25)" stroke-width="1" />
+            <path d="M12 18V14H16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M36 18V14H32" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 30V34H16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M36 30V34H32" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M19 22L16 24.5L19 27" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M29 22L32 24.5L29 27" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="24" cy="24.5" r="3" fill="white" />
+            <circle cx="34" cy="14" r="1.5" fill="#facc15" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="title">sharedom</span>
+          <span class="badge">v1.0.0</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="lang-toggle-btn" class="lang-toggle-btn" title="Switch language / Cambiar idioma">
+          ES
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <button id="inspect-btn" class="cta-button">
+        <div class="cta-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="22" y1="12" x2="18" y2="12"></line>
+            <line x1="6" y1="12" x2="2" y2="12"></line>
+            <line x1="12" y1="6" x2="12" y2="2"></line>
+            <line x1="12" y1="22" x2="12" y2="18"></line>
+          </svg>
+        </div>
+        <div class="cta-text">
+          <span id="cta-title" class="cta-title">Inspect DOM Element</span>
+          <span id="cta-subtitle" class="cta-subtitle">Hover & click any element on the page</span>
+        </div>
+      </button>
+
+      <section class="section">
+        <span id="txt-default-settings" class="section-title">Default Settings</span>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label id="txt-resolution-label" class="setting-label" for="scale-select">Resolution</label>
+            <select id="scale-select" class="custom-select">
+              <option value="1">1x Standard</option>
+              <option value="2" selected>2x Retina HD</option>
+              <option value="3">3x Ultra HD</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label id="txt-format-label" class="setting-label" for="format-select">Format</label>
+            <select id="format-select" class="custom-select">
+              <option value="png" selected>PNG (Alpha)</option>
+              <option value="jpeg">JPEG</option>
+              <option value="webp">WebP</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="shortcuts-card">
+        <div class="shortcuts-header">
+          <span id="txt-shortcuts-title" class="shortcuts-title">Keyboard Shortcuts</span>
+        </div>
+        <div class="shortcut-row">
+          <span id="txt-shortcut-inspect" class="shortcut-desc">Inspect Element</span>
+          <div class="kbd-wrap">
+            <kbd id="os-modifier">Alt</kbd>
+            <span>+</span>
+            <kbd>Shift</kbd>
+            <span>+</span>
+            <kbd>S</kbd>
+          </div>
+        </div>
+        <div class="shortcut-row">
+          <span id="txt-shortcut-parent-child" class="shortcut-desc">Parent / Child</span>
+          <div class="kbd-wrap">
+            <kbd>↑</kbd>
+            <kbd>↓</kbd>
+          </div>
+        </div>
+        <div class="shortcut-row">
+          <span id="txt-shortcut-capture" class="shortcut-desc">Capture Element</span>
+          <div class="kbd-wrap">
+            <kbd>↵ Enter</kbd>
+            <span>/</span>
+            <kbd>Space</kbd>
+          </div>
+        </div>
+        <div class="shortcut-row">
+          <span id="txt-shortcut-cancel" class="shortcut-desc">Cancel / Close</span>
+          <div class="kbd-wrap">
+            <kbd>Esc</kbd>
+          </div>
+        </div>
+      </section>
+
+      <a id="coffee-link" class="coffee-btn" href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener noreferrer">
+        <span class="coffee-icon">☕</span>
+        <span id="txt-coffee" class="coffee-text">Buy me a coffee</span>
+      </a>
+    </main>
+
+    <footer class="footer">
+      <span id="txt-footer">Zero dependencies DOM snapshotter</span>
+    </footer>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

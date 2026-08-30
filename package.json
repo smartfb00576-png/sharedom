@@ -24,6 +24,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup src/index.ts src/ssr.ts --format esm,cjs --dts --clean",
+    "build:extension": "node extension/scripts/build.mjs",
+    "zip:extension": "node extension/scripts/package.mjs",
     "build:preview": "vite build",
     "preview": "vite preview",
     "test": "playwright test",

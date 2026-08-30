@@ -197,9 +197,25 @@ npm run dev
 # Build library dist (Client & SSR)
 npm run build
 
+# Build Chrome Extension
+npm run build:extension
+
 # Build static preview for GitHub Pages
 npm run build:preview
 ```
+
+---
+
+## 🧩 Chrome Extension
+
+`sharedom` includes a built-in Chrome Extension in `extension/` for interactive DOM inspection and one-click capture:
+
+- **Interactive Hover & Highlight**: Highlights elements with tags, classes, and pixel dimensions.
+- **Copy & Download**: Copy PNG images directly to the clipboard or download in high resolution (1x, 2x, 3x).
+- **Keyboard Navigation**: Use `↑` for parent element, `↓` for child, `Esc` to cancel.
+- **Shortcuts**: Press `Alt + Shift + S` (`Cmd + Shift + S` on macOS) to activate.
+
+See the [Extension README](file:///Users/erickgiber/Documents/Repositories/sharedom/extension/README.md) for step-by-step installation instructions in `chrome://extensions`.
 
 ---
 

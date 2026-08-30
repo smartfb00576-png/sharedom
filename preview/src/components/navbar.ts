@@ -23,6 +23,9 @@ export function renderNavbar(container: HTMLElement): void {
         </div>
 
         <div class="nav-right">
+          <a href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener noreferrer" class="nav-coffee-btn" title="${t.nav.buyCoffee}">
+            ${t.nav.buyCoffee}
+          </a>
           <button type="button" class="lang-switch-btn" id="langSwitchBtn" title="Switch language">
             ${currentLang.toUpperCase()}
           </button>

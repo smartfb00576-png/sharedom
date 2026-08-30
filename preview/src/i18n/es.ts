@@ -7,6 +7,7 @@ export const es = {
     usage: 'Guía y SSR',
     npm: 'NPM ↗',
     github: 'GitHub ↗',
+    buyCoffee: '☕ Invítame un café',
     getStarted: 'Comenzar',
   },
   hero: {
