@@ -84,8 +84,58 @@ export const es = {
     license: 'Licencia MIT',
     builtWith: 'Creado con',
     by: 'por',
+    privacy: 'Política de Privacidad',
   },
   toast: {
     copiedNpm: 'Copiado: npm i sharedom',
   },
+  privacy: {
+    metaTitle: 'Política de Privacidad — ShareDOM',
+    metaDescription: 'Política de Privacidad oficial de ShareDOM y la extensión para Chrome. Cero telemetría, cero rastreo, ejecución 100% en el cliente.',
+    badge: '100% En el Cliente y Privado',
+    title: 'Política de Privacidad',
+    lastUpdated: 'Última actualización: 30 de agosto de 2026',
+    backHome: '← Volver al Inicio',
+    introTitle: 'Nuestro Compromiso con la Privacidad',
+    introText: 'ShareDOM es una herramienta de desarrollo y extensión de navegador de código abierto diseñada con la privacidad por defecto. Creemos firmemente que las herramientas de desarrollo deben respetar la privacidad del usuario: cero telemetría, cero analíticas, sin necesidad de cuentas ni inicio de sesión, y cero transmisión de datos a servidores externos.',
+    singlePurposeTitle: 'Declaración de Propósito Único',
+    singlePurposeText: 'La extensión ShareDOM existe únicamente para permitir a los desarrolladores y usuarios inspeccionar y capturar capturas de pantalla limpias y de alta resolución de elementos del DOM en páginas web.',
+    dataCollectionTitle: 'Cero Recopilación y Almacenamiento de Datos',
+    dataCollectionPoints: [
+      'Sin información personal: No recopilamos nombres, correos electrónicos, direcciones IP, ubicación ni identificadores de dispositivos.',
+      'Sin historial de navegación: No registramos, inspeccionamos ni transmitimos el historial de navegación, URLs visitadas ni actividad de pestañas.',
+      'Sin telemetría ni analíticas: No se incluye ningún rastreador de terceros (como Google Analytics, Mixpanel, Sentry ni similares).',
+      'Ejecución 100% local: Todas las operaciones de captura DOM, procesamiento de imágenes (PNG, JPEG, WebP), escalado y portapapeles se ejecutan estrictamente dentro del entorno de tu navegador.'
+    ],
+    permissionsTitle: 'Justificación de Permisos en la Extensión de Chrome',
+    permissionsIntro: 'Para funcionar adecuadamente como extensión de navegador, ShareDOM solicita los permisos mínimos e indispensables para inspeccionar elementos y generar capturas:',
+    permissions: [
+      {
+        name: 'activeTab',
+        desc: 'Permite interactuar con la pestaña activa únicamente cuando el usuario la ejecuta explícitamente (al hacer clic en el ícono de la barra, presionar Alt+Shift+S o desde el menú contextual).'
+      },
+      {
+        name: 'scripting',
+        desc: 'Permite inyectar el script de inspección en la página activa a petición del usuario para mostrar el marco de selección interactivo.'
+      },
+      {
+        name: 'storage',
+        desc: 'Se utiliza exclusivamente para guardar tus preferencias de interfaz (como escala de resolución por defecto, formato de imagen y lenguaje) de manera local en tu navegador (`chrome.storage.local`).'
+      },
+      {
+        name: 'contextMenus',
+        desc: 'Agrega la opción "Inspeccionar y Capturar Elemento DOM" al menú contextual del clic derecho para un acceso rápido.'
+      },
+      {
+        name: 'host_permissions ("<all_urls>")',
+        desc: 'Permite al service worker descargar imágenes públicas de orígenes cruzados presentes dentro del elemento DOM a capturar y convertirlas a Base64. Esto evita errores de CORS (tainted canvas) en el navegador. No se guardan ni envían URLs ni datos a ningún servidor.'
+      }
+    ],
+    thirdPartyTitle: 'Servicios de Terceros y Código Remoto',
+    thirdPartyText: 'ShareDOM no incluye código remoto ejecutable, no carga scripts dinámicos desde servidores externos y no envía datos a ninguna API de terceros.',
+    openSourceTitle: 'Transparencia y Código Abierto',
+    openSourceText: 'ShareDOM es software libre y de código abierto bajo la Licencia MIT. Todo el código fuente está disponible públicamente para auditoría en GitHub en',
+    contactTitle: 'Contacto y Soporte',
+    contactText: 'Si tienes preguntas, sugerencias o inquietudes sobre esta Política de Privacidad o la seguridad de ShareDOM, puedes abrir un issue o discusión en el repositorio oficial de GitHub.'
+  }
 };

@@ -6,6 +6,12 @@ export default defineConfig({
   build: {
     outDir: '../dist-preview',
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: new URL('./preview/index.html', import.meta.url).pathname,
+        privacy: new URL('./preview/privacy.html', import.meta.url).pathname,
+      },
+    },
   },
   server: {
     port: 5173,

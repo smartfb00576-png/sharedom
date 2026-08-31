@@ -4,7 +4,8 @@ import { renderPlayground } from './src/components/playground';
 import { renderFeatures } from './src/components/features';
 import { renderUsage } from './src/components/usage';
 import { renderFooter } from './src/components/footer';
-import { onLanguageChange } from './src/i18n';
+import { renderPrivacy } from './src/components/privacy';
+import { onLanguageChange, getT } from './src/i18n';
 
 const revealedKeys = new Set<string>();
 
@@ -51,6 +52,41 @@ export function setupScrollAnimations(): void {
   }
 }
 
+function handleRoute(): void {
+  const hash = window.location.hash.toLowerCase();
+  const isPrivacy = hash === '#/privacy' || hash === '#privacy';
+
+  const landingContainer = document.getElementById('landing-content');
+  const privacyContainer = document.getElementById('privacy-mount');
+
+  if (isPrivacy) {
+    if (landingContainer) landingContainer.style.display = 'none';
+    if (privacyContainer) {
+      privacyContainer.style.display = 'block';
+      renderPrivacy(privacyContainer);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    const t = getT();
+    document.title = t.privacy.metaTitle;
+  } else {
+    if (privacyContainer) privacyContainer.style.display = 'none';
+    if (landingContainer) landingContainer.style.display = 'block';
+    const t = getT();
+    document.title = t.metaTitle;
+    setupScrollAnimations();
+
+    if (hash && hash !== '#' && hash !== '#/' && !hash.startsWith('#/privacy')) {
+      const targetId = hash.replace(/^#\/?/, '');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        setTimeout(() => {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      }
+    }
+  }
+}
+
 function initApp(): void {
   const navMount = document.getElementById('navbar-mount');
   const heroMount = document.getElementById('hero-mount');
@@ -66,9 +102,11 @@ function initApp(): void {
   if (usageMount) renderUsage(usageMount);
   if (footerMount) renderFooter(footerMount);
 
-  setupScrollAnimations();
+  handleRoute();
+  window.addEventListener('hashchange', handleRoute);
+
   onLanguageChange(() => {
-    setupScrollAnimations();
+    handleRoute();
   });
 }
 
@@ -77,3 +115,4 @@ if (document.readyState === 'loading') {
 } else {
   initApp();
 }
+

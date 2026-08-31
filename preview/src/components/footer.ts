@@ -9,10 +9,13 @@ export function renderFooter(container: HTMLElement): void {
     container.innerHTML = `
       <footer>
         <div class="footer-logo">
-          <img src="${logoUrl}" alt="ShareDOM logo" width="20" height="20" />
-          <span class="logo-name">ShareDOM</span>
+          <a href="#" class="footer-logo-link" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit;">
+            <img src="${logoUrl}" alt="ShareDOM logo" width="20" height="20" />
+            <span class="logo-name">ShareDOM</span>
+          </a>
         </div>
         <div class="footer-links">
+          <a href="#/privacy" class="footer-privacy-link">${t.footer.privacy}</a>
           <a href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener" class="footer-coffee-link">☕ ${t.nav.buyCoffee.replace('☕ ', '')}</a>
           <a href="https://www.npmjs.com/package/sharedom" target="_blank" rel="noopener">NPM ↗</a>
           <a href="https://github.com/Erickgiber/sharedom" target="_blank" rel="noopener">GitHub ↗</a>

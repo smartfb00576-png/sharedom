@@ -49,6 +49,7 @@ When submitting, Chrome Web Store reviewers require a plain-English explanation 
 
 ## 3. Privacy & Data Handling Declarations
 
+- **Privacy Policy URL**: `https://erickgiber.github.io/sharedom/#/privacy` (or `https://erickgiber.github.io/sharedom/privacy.html`)
 - **Single Purpose**: `A developer utility to inspect and capture screenshots of DOM elements on web pages.`
 - **Data Collection**: `None. The extension does not collect, store, or transmit any user data, personal info, authentication credentials, or browsing history.`
 - **Remote Code**: `None. All code is statically bundled and runs locally in the browser.`

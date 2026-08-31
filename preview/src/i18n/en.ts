@@ -84,8 +84,58 @@ export const en = {
     license: 'MIT License',
     builtWith: 'Built with',
     by: 'by',
+    privacy: 'Privacy Policy',
   },
   toast: {
     copiedNpm: 'Copied: npm i sharedom',
   },
+  privacy: {
+    metaTitle: 'Privacy Policy — ShareDOM',
+    metaDescription: 'Official Privacy Policy for ShareDOM and the ShareDOM Chrome Extension. Zero telemetry, zero tracking, 100% client-side execution.',
+    badge: '100% Client-Side & Private',
+    title: 'Privacy Policy',
+    lastUpdated: 'Last Updated: August 30, 2026',
+    backHome: '← Back to Home',
+    introTitle: 'Our Commitment to Privacy',
+    introText: 'ShareDOM is an open-source developer tool and browser extension designed with privacy by default. We firmly believe that developer tools should respect user privacy completely: zero telemetry, zero analytics tracking, zero account requirements, and zero remote data transmission.',
+    singlePurposeTitle: 'Single Purpose Declaration',
+    singlePurposeText: 'The ShareDOM extension exists solely to allow users to inspect and capture clean, high-resolution screenshots of DOM elements on web pages.',
+    dataCollectionTitle: 'Zero Data Collection & Storage',
+    dataCollectionPoints: [
+      'No Personal Information: We do not collect names, email addresses, IP addresses, location data, or device identifiers.',
+      'No Browsing History: We do not record, inspect, log, or transmit any web browsing history, visited URLs, or tab activity.',
+      'No Telemetry or Analytics: No third-party trackers (such as Google Analytics, Mixpanel, or Sentry) are included or loaded in the extension or library.',
+      '100% Local Execution: All DOM snapshotting, image formatting (PNG, JPEG, WebP), scale rendering, and clipboard operations occur strictly inside your browser runtime.'
+    ],
+    permissionsTitle: 'Chrome Extension Permissions Justification',
+    permissionsIntro: 'To function correctly as a browser extension, ShareDOM declares the minimal necessary permissions required to inspect elements and generate screenshots:',
+    permissions: [
+      {
+        name: 'activeTab',
+        desc: 'Enables the extension to interact with the currently active browser tab only when you explicitly invoke it (e.g., clicking the toolbar icon, pressing Alt+Shift+S, or selecting the context menu item).'
+      },
+      {
+        name: 'scripting',
+        desc: 'Allows the extension to inject the DOM inspection content script into the active page upon explicit user trigger, displaying the visual highlight overlay.'
+      },
+      {
+        name: 'storage',
+        desc: 'Used exclusively to persist your user UI preferences (such as default resolution scale, preferred image export format, and language) locally in your browser storage (`chrome.storage.local`).'
+      },
+      {
+        name: 'contextMenus',
+        desc: 'Adds the "Inspect & Capture DOM Element" option to your browser right-click context menu for rapid access.'
+      },
+      {
+        name: 'host_permissions ("<all_urls>")',
+        desc: 'Allows the background service worker to fetch public cross-origin image resources referenced inside captured DOM elements and convert them into Base64 data URLs. This prevents browser canvas tainting (CORS errors) and ensures captured screenshots display images correctly. No URLs or browsing data are ever recorded or sent to any server.'
+      }
+    ],
+    thirdPartyTitle: 'Third-Party Services & Remote Code',
+    thirdPartyText: 'ShareDOM does not include any remote code, does not load external scripts dynamically, and does not transmit data to any external API servers or third parties.',
+    openSourceTitle: 'Open Source Transparency',
+    openSourceText: 'ShareDOM is free and open-source software released under the MIT License. The entire source code is publicly accessible and auditable on GitHub at',
+    contactTitle: 'Questions & Support',
+    contactText: 'If you have any questions, feedback, or concerns regarding this Privacy Policy or the security of ShareDOM, feel free to open an issue on the official GitHub repository.'
+  }
 };
