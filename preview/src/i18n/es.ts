@@ -95,7 +95,7 @@ export const es = {
     badge: '100% En el Cliente y Privado',
     title: 'Política de Privacidad',
     lastUpdated: 'Última actualización: 30 de agosto de 2026',
-    backHome: '← Volver al Inicio',
+    backHome: 'Volver al Inicio',
     introTitle: 'Nuestro Compromiso con la Privacidad',
     introText: 'ShareDOM es una herramienta de desarrollo y extensión de navegador de código abierto diseñada con la privacidad por defecto. Creemos firmemente que las herramientas de desarrollo deben respetar la privacidad del usuario: cero telemetría, cero analíticas, sin necesidad de cuentas ni inicio de sesión, y cero transmisión de datos a servidores externos.',
     singlePurposeTitle: 'Declaración de Propósito Único',

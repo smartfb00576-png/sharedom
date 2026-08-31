@@ -95,7 +95,7 @@ export const en = {
     badge: '100% Client-Side & Private',
     title: 'Privacy Policy',
     lastUpdated: 'Last Updated: August 30, 2026',
-    backHome: '← Back to Home',
+    backHome: 'Back to Home',
     introTitle: 'Our Commitment to Privacy',
     introText: 'ShareDOM is an open-source developer tool and browser extension designed with privacy by default. We firmly believe that developer tools should respect user privacy completely: zero telemetry, zero analytics tracking, zero account requirements, and zero remote data transmission.',
     singlePurposeTitle: 'Single Purpose Declaration',
