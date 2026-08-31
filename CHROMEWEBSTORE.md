@@ -8,7 +8,7 @@ This document contains all official store metadata, permission justifications, p
 
 ## 1. Store Listing Details
 
-- **Item Name**: `sharedom - DOM Screenshot Inspector`
+- **Item Name**: `ShareDOM - DOM Screenshot Inspector`
 - **Summary / Short Description** (≤ 132 chars):
   `Inspect, select, and capture high-quality screenshots of any DOM element with live preview, copy to clipboard, and instant download.`
 - **Category**: `Developer Tools`

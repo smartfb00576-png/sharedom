@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "sharedom - DOM Screenshot Inspector",
+  "name": "ShareDOM - DOM Screenshot Inspector",
   "version": "1.0.0",
   "description": "Inspect, select, and capture high-quality screenshots of any DOM element with live preview, copy to clipboard, and instant download.",
   "icons": {
