@@ -118,6 +118,102 @@ body {
   box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
+.cta-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  background: #27272a;
+}
+
+/* ---- Status & Permission Banner ---- */
+.status-banner {
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+}
+
+.status-banner.banner-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-banner.banner-warning .banner-icon-wrap {
+  color: #f59e0b;
+}
+
+.status-banner.banner-error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.status-banner.banner-error .banner-icon-wrap {
+  color: #ef4444;
+}
+
+.banner-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.banner-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.banner-desc {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #a1a1aa;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.banner-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.banner-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.banner-btn-primary {
+  background: #6366f1;
+  border-color: #6366f1;
+}
+
+.banner-btn-primary:hover {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
 .cta-button:active {
   transform: translateY(0);
 }

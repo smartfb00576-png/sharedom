@@ -125,10 +125,6 @@ export const en = {
       {
         name: 'contextMenus',
         desc: 'Adds the "Inspect & Capture DOM Element" option to your browser right-click context menu for rapid access.'
-      },
-      {
-        name: 'host_permissions ("<all_urls>")',
-        desc: 'Allows the background service worker to fetch public cross-origin image resources referenced inside captured DOM elements and convert them into Base64 data URLs. This prevents browser canvas tainting (CORS errors) and ensures captured screenshots display images correctly. No URLs or browsing data are ever recorded or sent to any server.'
       }
     ],
     thirdPartyTitle: 'Third-Party Services & Remote Code',

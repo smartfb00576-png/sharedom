@@ -39,25 +39,43 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
 });
 
-async function toggleInspectorOnActiveTab(): Promise<void> {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab?.id || !tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('edge://')) {
-    return;
-  }
+function isUrlRestricted(url?: string): boolean {
+  if (!url) return true;
+  const restricted = [
+    'chrome://',
+    'edge://',
+    'about:',
+    'chrome-extension://',
+    'devtools://',
+    'view-source:',
+    'https://chromewebstore.google.com',
+    'https://chrome.google.com/webstore',
+    'https://microsoftedge.microsoft.com/addons',
+  ];
+  return restricted.some((prefix) => url.startsWith(prefix));
+}
 
+async function toggleInspectorOnActiveTab(): Promise<void> {
   try {
-    await chrome.tabs.sendMessage(tab.id, { type: 'TOGGLE_INSPECTOR' });
-  } catch {
-    await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      files: ['content.js'],
-    });
-    setTimeout(async () => {
-      try {
-        await chrome.tabs.sendMessage(tab.id!, { type: 'START_INSPECTOR' });
-      } catch {}
-    }, 150);
-  }
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.id || isUrlRestricted(tab.url)) {
+      return;
+    }
+
+    try {
+      await chrome.tabs.sendMessage(tab.id, { type: 'TOGGLE_INSPECTOR' });
+    } catch {
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: ['content.js'],
+      });
+      setTimeout(async () => {
+        try {
+          await chrome.tabs.sendMessage(tab.id!, { type: 'START_INSPECTOR' });
+        } catch {}
+      }, 150);
+    }
+  } catch {}
 }
 
 chrome.commands.onCommand.addListener(async (command) => {

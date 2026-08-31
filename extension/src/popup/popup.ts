@@ -19,12 +19,81 @@ const txtShortcutCancel = document.getElementById('txt-shortcut-cancel') as HTML
 const txtCoffee = document.getElementById('txt-coffee') as HTMLElement;
 const txtFooter = document.getElementById('txt-footer') as HTMLElement;
 
+// Status & Permission Banner elements
+const statusBanner = document.getElementById('status-banner') as HTMLElement;
+const bannerIconShield = document.getElementById('banner-icon-shield') as HTMLElement;
+const bannerIconAlert = document.getElementById('banner-icon-alert') as HTMLElement;
+const bannerTitle = document.getElementById('banner-title') as HTMLElement;
+const bannerDesc = document.getElementById('banner-desc') as HTMLElement;
+const bannerActions = document.getElementById('banner-actions') as HTMLElement;
+const bannerRetryBtn = document.getElementById('banner-retry-btn') as HTMLButtonElement;
+const bannerReloadBtn = document.getElementById('banner-reload-btn') as HTMLButtonElement;
+
 const isMac = navigator.platform.toUpperCase().includes('MAC') || navigator.userAgent.includes('Macintosh');
 if (osModifier) {
   osModifier.textContent = isMac ? '⌥ Option' : 'Alt';
 }
 
 let currentLanguage: ExtensionLanguage = 'en';
+let currentTab: chrome.tabs.Tab | null = null;
+let isRestrictedPage = false;
+let hasPermissionError = false;
+
+function isUrlRestricted(url?: string): boolean {
+  if (!url) return true;
+  const restrictedPrefixes = [
+    'chrome://',
+    'edge://',
+    'about:',
+    'chrome-extension://',
+    'devtools://',
+    'view-source:',
+  ];
+  if (restrictedPrefixes.some((prefix) => url.startsWith(prefix))) {
+    return true;
+  }
+  if (
+    url.startsWith('https://chromewebstore.google.com') ||
+    url.startsWith('https://chrome.google.com/webstore') ||
+    url.startsWith('https://microsoftedge.microsoft.com/addons')
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function updateBannerUI(): void {
+  const t = translations[currentLanguage].popup;
+
+  if (isRestrictedPage) {
+    if (statusBanner) {
+      statusBanner.style.display = 'flex';
+      statusBanner.className = 'status-banner banner-warning';
+    }
+    if (bannerIconShield) bannerIconShield.style.display = 'block';
+    if (bannerIconAlert) bannerIconAlert.style.display = 'none';
+    if (bannerTitle) bannerTitle.textContent = t.restrictedPageTitle;
+    if (bannerDesc) bannerDesc.textContent = t.restrictedPageDesc;
+    if (bannerActions) bannerActions.style.display = 'none';
+    if (inspectBtn) inspectBtn.disabled = true;
+  } else if (hasPermissionError) {
+    if (statusBanner) {
+      statusBanner.style.display = 'flex';
+      statusBanner.className = 'status-banner banner-error';
+    }
+    if (bannerIconShield) bannerIconShield.style.display = 'none';
+    if (bannerIconAlert) bannerIconAlert.style.display = 'block';
+    if (bannerTitle) bannerTitle.textContent = t.permissionErrorTitle;
+    if (bannerDesc) bannerDesc.textContent = t.permissionErrorDesc;
+    if (bannerActions) bannerActions.style.display = 'flex';
+    if (bannerRetryBtn) bannerRetryBtn.textContent = t.btnRetry;
+    if (bannerReloadBtn) bannerReloadBtn.textContent = t.btnReloadTab;
+    if (inspectBtn) inspectBtn.disabled = false;
+  } else {
+    if (statusBanner) statusBanner.style.display = 'none';
+    if (inspectBtn) inspectBtn.disabled = false;
+  }
+}
 
 function applyLanguage(lang: ExtensionLanguage): void {
   currentLanguage = lang;
@@ -64,6 +133,8 @@ function applyLanguage(lang: ExtensionLanguage): void {
       opts[2].textContent = t.fmtWebp;
     }
   }
+
+  updateBannerUI();
 }
 
 async function loadSettings(): Promise<void> {
@@ -96,18 +167,23 @@ async function saveSettings(): Promise<void> {
   } catch {}
 }
 
-langToggleBtn?.addEventListener('click', async () => {
-  const nextLang: ExtensionLanguage = currentLanguage === 'en' ? 'es' : 'en';
-  applyLanguage(nextLang);
-  await saveSettings();
-});
+async function checkActiveTab(): Promise<void> {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    currentTab = tab || null;
+    isRestrictedPage = isUrlRestricted(tab?.url);
+    updateBannerUI();
+  } catch {
+    isRestrictedPage = true;
+    updateBannerUI();
+  }
+}
 
-scaleSelect?.addEventListener('change', saveSettings);
-formatSelect?.addEventListener('change', saveSettings);
+async function startInspection(): Promise<void> {
+  hasPermissionError = false;
+  updateBannerUI();
 
-inspectBtn?.addEventListener('click', async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab?.id || !tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('edge://')) {
+  if (!currentTab?.id || isRestrictedPage) {
     return;
   }
 
@@ -118,30 +194,61 @@ inspectBtn?.addEventListener('click', async () => {
   };
 
   try {
-    await chrome.tabs.sendMessage(tab.id, {
+    // 1. Check if content script is already present and responding
+    await chrome.tabs.sendMessage(currentTab.id, {
       type: 'START_INSPECTOR',
       options: inspectorOptions,
     });
     window.close();
   } catch {
+    // 2. If not running, dynamically inject content script via scripting + activeTab
     try {
       await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
+        target: { tabId: currentTab.id },
         files: ['content.js'],
       });
+
+      // Brief yield to allow content script registration
       setTimeout(async () => {
         try {
-          await chrome.tabs.sendMessage(tab.id!, {
+          await chrome.tabs.sendMessage(currentTab!.id!, {
             type: 'START_INSPECTOR',
             options: inspectorOptions,
           });
-        } catch {}
-        window.close();
+          window.close();
+        } catch {
+          hasPermissionError = true;
+          updateBannerUI();
+        }
       }, 100);
     } catch {
-      window.close();
+      hasPermissionError = true;
+      updateBannerUI();
     }
+  }
+}
+
+langToggleBtn?.addEventListener('click', async () => {
+  const nextLang: ExtensionLanguage = currentLanguage === 'en' ? 'es' : 'en';
+  applyLanguage(nextLang);
+  await saveSettings();
+});
+
+scaleSelect?.addEventListener('change', saveSettings);
+formatSelect?.addEventListener('change', saveSettings);
+
+inspectBtn?.addEventListener('click', startInspection);
+bannerRetryBtn?.addEventListener('click', startInspection);
+
+bannerReloadBtn?.addEventListener('click', async () => {
+  if (currentTab?.id) {
+    try {
+      await chrome.tabs.reload(currentTab.id);
+      window.close();
+    } catch {}
   }
 });
 
 loadSettings();
+checkActiveTab();
+

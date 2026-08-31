@@ -39,11 +39,10 @@ When submitting, Chrome Web Store reviewers require a plain-English explanation 
 
 | Permission | Justification for Review Team |
 | :--- | :--- |
-| `activeTab` | Required to inspect DOM elements on the webpage currently open and active when invoked by user gesture (clicking extension icon or pressing shortcut). |
-| `scripting` | Required to inject the isolated inspection content script into the active tab upon user trigger. |
-| `storage` | Required to save user default preferences locally (default resolution scale, preferred image format, language choice). |
+| `activeTab` | Required to inspect and capture DOM elements on the active webpage only upon explicit user invocation (clicking the toolbar action, pressing the shortcut Alt+Shift+S, or selecting the context menu item). |
+| `scripting` | Required to dynamically inject the isolated inspection content script into the active tab upon user trigger. |
+| `storage` | Required to save user default preferences locally (default resolution scale, preferred image format, language choice) in chrome.storage.local. |
 | `contextMenus` | Required to provide a "Inspect & Capture DOM Element" option when right-clicking on elements. |
-| `host_permissions: ["<all_urls>"]` | Required to fetch public cross-origin images nested inside captured DOM elements via background service worker to inline them as Base64 and prevent tainted canvas failures. |
 
 ---
 

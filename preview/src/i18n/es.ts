@@ -125,10 +125,6 @@ export const es = {
       {
         name: 'contextMenus',
         desc: 'Agrega la opción "Inspeccionar y Capturar Elemento DOM" al menú contextual del clic derecho para un acceso rápido.'
-      },
-      {
-        name: 'host_permissions ("<all_urls>")',
-        desc: 'Permite al service worker descargar imágenes públicas de orígenes cruzados presentes dentro del elemento DOM a capturar y convertirlas a Base64. Esto evita errores de CORS (tainted canvas) en el navegador. No se guardan ni envían URLs ni datos a ningún servidor.'
       }
     ],
     thirdPartyTitle: 'Servicios de Terceros y Código Remoto',
