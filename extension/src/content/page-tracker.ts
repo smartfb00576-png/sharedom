@@ -5,21 +5,10 @@
 
   const logsBuffer: Array<{ level: string; message: string; timestamp: number; count: number }> = [];
   const reqsBuffer: Array<any> = [];
-  const MAX_BUFFER = 300;
+  const MAX_LOGS = 200;
+  const MAX_REQS = 150;
 
-  function emitEvent(name: string, payload: any): void {
-    try {
-      const detail = JSON.stringify(payload);
-      window.dispatchEvent(new CustomEvent(name, { detail }));
-      document.dispatchEvent(new CustomEvent(name, { detail }));
-    } catch {
-      try {
-        window.dispatchEvent(new CustomEvent(name, { detail: payload }));
-      } catch {}
-    }
-  }
-
-  function formatValue(v: unknown): string {
+  function formatValue(v: unknown, depth = 0): string {
     if (v === null) return 'null';
     if (v === undefined) return 'undefined';
     if (typeof v === 'string') return v;
@@ -28,6 +17,7 @@
       return v.stack || `${v.name}: ${v.message}`;
     }
     if (typeof v === 'object') {
+      if (depth > 1) return Object.prototype.toString.call(v);
       try {
         if ('message' in (v as any) && 'name' in (v as any)) {
           return (v as any).stack || `${(v as any).name}: ${(v as any).message}`;
@@ -41,7 +31,7 @@
   }
 
   function formatConsoleArgs(args: unknown[]): string {
-    if (args.length === 0) return '';
+    if (!args || args.length === 0) return '';
 
     const first = args[0];
     if (typeof first === 'string' && first.includes('%c')) {
@@ -55,12 +45,12 @@
         extraArgs.push(a);
       }
       if (extraArgs.length > 0) {
-        text += ' ' + extraArgs.map(formatValue).join(' ');
+        text += ' ' + extraArgs.map((a) => formatValue(a, 0)).join(' ');
       }
       return text;
     }
 
-    return args.map(formatValue).join(' ');
+    return args.map((a) => formatValue(a, 0)).join(' ');
   }
 
   function recordLog(level: string, rawArgs: unknown[]): void {
@@ -80,42 +70,35 @@
         last.count = (last.count || 1) + 1;
         last.timestamp = item.timestamp;
       } else {
-        if (logsBuffer.length >= MAX_BUFFER) logsBuffer.shift();
+        if (logsBuffer.length >= MAX_LOGS) logsBuffer.shift();
         logsBuffer.push(item);
       }
-
-      emitEvent('__sharedom_page_log__', item);
     } catch {}
   }
 
+  // Hook console with strict re-entrancy protection
+  let isLogging = false;
   const methods = ['log', 'info', 'warn', 'error', 'debug', 'trace', 'dir', 'table'] as const;
   for (const method of methods) {
-    let original = (console as any)[method];
-    const hook = function (...args: any[]) {
-      const level = method === 'trace' ? 'debug' : (method === 'dir' || method === 'table' ? 'log' : method);
-      recordLog(level, args);
-      if (typeof original === 'function') {
-        try {
-          return original.apply(console, args);
-        } catch {
-          return original(...args);
+    const orig = (console as any)[method];
+    if (typeof orig === 'function') {
+      (console as any)[method] = function (...args: any[]) {
+        if (!isLogging) {
+          isLogging = true;
+          try {
+            const level = method === 'trace' ? 'debug' : (method === 'dir' || method === 'table' ? 'log' : method);
+            recordLog(level, args);
+          } catch {}
+          finally {
+            isLogging = false;
+          }
         }
-      }
-    };
-
-    try {
-      Object.defineProperty(console, method, {
-        configurable: true,
-        enumerable: true,
-        get() {
-          return hook;
-        },
-        set(newFn) {
-          original = newFn;
-        },
-      });
-    } catch {
-      (console as any)[method] = hook;
+        try {
+          return orig.apply(console, args);
+        } catch {
+          return orig(...args);
+        }
+      };
     }
   }
 
@@ -153,21 +136,32 @@
   }
 
   function recordReq(req: any): void {
-    if (reqsBuffer.length >= MAX_BUFFER) reqsBuffer.shift();
-    reqsBuffer.push(req);
-    emitEvent('__sharedom_page_req__', req);
+    try {
+      if (reqsBuffer.length >= MAX_REQS) reqsBuffer.shift();
+      reqsBuffer.push(req);
+    } catch {}
   }
 
+  let isFetching = false;
   if (typeof window.fetch === 'function') {
     const origFetch = window.fetch;
-    window.fetch = function (input: RequestInfo | URL, init?: RequestInit) {
+    window.fetch = function (this: any, ...args: any[]) {
+      if (isFetching) {
+        return origFetch.apply(this, args);
+      }
       const start = performance.now();
-      const url = typeof input === 'string'
-        ? input
-        : (input && (input as Request).url ? (input as Request).url : String(input));
-      const method = (init && init.method) || ((input as Request) && (input as Request).method) || 'GET';
+      let url = '';
+      let method = 'GET';
+      try {
+        const input = args[0];
+        const init = args[1];
+        url = typeof input === 'string'
+          ? input
+          : (input && (input as Request).url ? (input as Request).url : String(input));
+        method = (init && init.method) || ((input as Request) && (input as Request).method) || 'GET';
+      } catch {}
 
-      return origFetch.apply(window, [input, init]).then((res) => {
+      return origFetch.apply(this, args).then((res) => {
         try {
           recordReq({
             method: method.toUpperCase(),
@@ -209,39 +203,46 @@
       url: string | URL,
       ...rest: any[]
     ) {
-      this.__sh_method = method;
-      this.__sh_url = typeof url === 'string' ? url : (url && (url as URL).href ? (url as URL).href : String(url));
+      try {
+        this.__sh_method = method;
+        this.__sh_url = typeof url === 'string' ? url : (url && (url as URL).href ? (url as URL).href : String(url));
+      } catch {}
       return (origOpen as any).apply(this, [method, url, ...rest]);
     };
 
     XMLHttpRequest.prototype.send = function (
       this: XMLHttpRequest & { __sh_method?: string; __sh_url?: string },
-      body?: Document | XMLHttpRequestBodyInit | null
+      ...args: any[]
     ) {
       const self = this;
       const start = performance.now();
-      this.addEventListener('loadend', () => {
-        try {
-          recordReq({
-            method: (self.__sh_method || 'GET').toUpperCase(),
-            url: self.__sh_url || '',
-            name: extractName(self.__sh_url || ''),
-            status: self.status,
-            statusText: self.statusText,
-            type: 'xhr',
-            duration: Math.round(performance.now() - start),
-            timestamp: Date.now(),
-          });
-        } catch {}
-      });
-      return origSend.apply(this, [body]);
+      try {
+        this.addEventListener('loadend', () => {
+          try {
+            recordReq({
+              method: (self.__sh_method || 'GET').toUpperCase(),
+              url: self.__sh_url || '',
+              name: extractName(self.__sh_url || ''),
+              status: self.status,
+              statusText: self.statusText,
+              type: 'xhr',
+              duration: Math.round(performance.now() - start),
+              timestamp: Date.now(),
+            });
+          } catch {}
+        }, { once: true });
+      } catch {}
+      return origSend.apply(this, args);
     };
   }
 
-  const handleSync = () => {
-    logsBuffer.forEach((log) => emitEvent('__sharedom_page_log__', log));
-    reqsBuffer.forEach((req) => emitEvent('__sharedom_page_req__', req));
-  };
-  window.addEventListener('__sharedom_request_sync__', handleSync);
-  document.addEventListener('__sharedom_request_sync__', handleSync);
+  // Respond cleanly only when requested by extension
+  window.addEventListener('__sharedom_request_sync__', () => {
+    try {
+      const payload = JSON.stringify({ logs: logsBuffer, reqs: reqsBuffer });
+      window.dispatchEvent(new CustomEvent('__sharedom_sync_response__', {
+        detail: payload,
+      }));
+    } catch {}
+  });
 })();

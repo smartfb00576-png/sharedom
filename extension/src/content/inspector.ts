@@ -22,74 +22,51 @@ export interface InspectorStartOptions {
 const pageLogs: ConsoleLogEntry[] = [];
 const pageRequests: NetworkRequestEntry[] = [];
 
-if (typeof window !== 'undefined') {
-  startConsoleCapture();
-  startNetworkCapture();
+export function requestMainWorldSync(): Promise<void> {
+  return new Promise((resolve) => {
+    let done = false;
+    const timeout = setTimeout(() => {
+      if (!done) {
+        done = true;
+        window.removeEventListener('__sharedom_sync_response__', onResponse);
+        resolve();
+      }
+    }, 40);
 
-  const handlePageLog = (e: Event) => {
-    let detail = (e as CustomEvent).detail;
-    if (typeof detail === 'string') {
-      try { detail = JSON.parse(detail); } catch {}
+    const onResponse = (e: Event) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timeout);
+      window.removeEventListener('__sharedom_sync_response__', onResponse);
+
+      try {
+        let detail = (e as CustomEvent).detail;
+        if (typeof detail === 'string') detail = JSON.parse(detail);
+        if (detail && Array.isArray(detail.logs)) {
+          pageLogs.length = 0;
+          pageLogs.push(...detail.logs);
+        }
+        if (detail && Array.isArray(detail.reqs)) {
+          pageRequests.length = 0;
+          pageRequests.push(...detail.reqs);
+        }
+      } catch {}
+      resolve();
+    };
+
+    window.addEventListener('__sharedom_sync_response__', onResponse);
+    try {
+      window.dispatchEvent(new CustomEvent('__sharedom_request_sync__'));
+    } catch {
+      clearTimeout(timeout);
+      window.removeEventListener('__sharedom_sync_response__', onResponse);
+      resolve();
     }
-    if (!detail || !detail.message) return;
-
-    const last = pageLogs[pageLogs.length - 1];
-    if (last && last.level === detail.level && last.message === detail.message) {
-      if (last.timestamp === detail.timestamp) return;
-      last.count = (last.count || 1) + (detail.count || 1);
-      last.timestamp = detail.timestamp || Date.now();
-      return;
-    }
-    const exists = pageLogs.some((l) => l.timestamp === detail.timestamp && l.message === detail.message);
-    if (exists) return;
-
-    pageLogs.push(detail);
-    if (pageLogs.length > 200) pageLogs.shift();
-  };
-
-  window.addEventListener('__sharedom_page_log__', handlePageLog);
-  document.addEventListener('__sharedom_page_log__', handlePageLog);
-
-  const handlePageReq = (e: Event) => {
-    let detail = (e as CustomEvent).detail;
-    if (typeof detail === 'string') {
-      try { detail = JSON.parse(detail); } catch {}
-    }
-    if (!detail || !detail.url) return;
-
-    const exists = pageRequests.some((r) => r.timestamp === detail.timestamp && r.url === detail.url && r.method === detail.method);
-    if (exists) return;
-
-    pageRequests.push(detail);
-    if (pageRequests.length > 200) pageRequests.shift();
-  };
-
-  window.addEventListener('__sharedom_page_req__', handlePageReq);
-  document.addEventListener('__sharedom_page_req__', handlePageReq);
-
-  try {
-    const syncEv = new CustomEvent('__sharedom_request_sync__');
-    window.dispatchEvent(syncEv);
-    document.dispatchEvent(syncEv);
-  } catch {}
+  });
 }
 
 export function installPageTracker(): void {
-  if (typeof document === 'undefined' || document.getElementById('__sharedom_page_tracker__')) {
-    return;
-  }
-  try {
-    const script = document.createElement('script');
-    script.id = '__sharedom_page_tracker__';
-    script.src = chrome.runtime.getURL('page-tracker.js');
-    script.onload = () => {
-      try { script.remove(); } catch (_) {}
-    };
-    script.onerror = () => {
-      try { script.remove(); } catch (_) {}
-    };
-    (document.head || document.documentElement).appendChild(script);
-  } catch (_) {}
+  // Main world execution is handled natively by manifest.json at document_start.
 }
 
 export class DomInspector {
@@ -170,11 +147,7 @@ export class DomInspector {
   }
 
   public async captureConsole(options?: InspectorStartOptions): Promise<void> {
-    try {
-      const syncEv = new CustomEvent('__sharedom_request_sync__');
-      window.dispatchEvent(syncEv);
-      document.dispatchEvent(syncEv);
-    } catch {}
+    await requestMainWorldSync();
 
     this.stop();
     this.isActive = true;
@@ -214,11 +187,7 @@ export class DomInspector {
   }
 
   public async captureNetwork(options?: InspectorStartOptions): Promise<void> {
-    try {
-      const syncEv = new CustomEvent('__sharedom_request_sync__');
-      window.dispatchEvent(syncEv);
-      document.dispatchEvent(syncEv);
-    } catch {}
+    await requestMainWorldSync();
 
     this.stop();
     this.isActive = true;

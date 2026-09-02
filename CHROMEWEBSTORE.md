@@ -45,6 +45,7 @@ When submitting, Chrome Web Store reviewers require a plain-English explanation 
 | `scripting` | Required to dynamically inject the isolated inspection content script into the active tab upon user trigger. |
 | `storage` | Required to save user default preferences locally (default resolution scale, preferred image format, language choice) in chrome.storage.local. |
 | `contextMenus` | Required to provide a "Inspect & Capture DOM Element" option when right-clicking on elements. |
+| `Host Permissions (<all_urls>)` | Required because ShareDOM is an arbitrary DOM element inspector and developer diagnostic tool. Developers use it to inspect, capture screenshots, and record console logs and network requests across any website they are developing or auditing. Access to all URLs is necessary because the extension cannot predict in advance which web pages the developer will inspect. All operations are strictly local and client-side; no data is ever transmitted externally. |
 
 ---
 
