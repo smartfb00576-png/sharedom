@@ -147,9 +147,8 @@ export function renderPdfDemo(container: HTMLElement): void {
           <h2>${t.pdfDemo.title}</h2>
           <p>${t.pdfDemo.subtitle}</p>
         </div>
-        <div class="pdf-demo-layout anim-in" style="transition-delay:150ms" data-anim-key="pdf-body">
+        <div class="pdf-demo-layout anim-in" id="pdfDemoLayout" style="transition-delay:150ms" data-anim-key="pdf-body">
           <div class="pdf-preview-col">
-            <p class="pdf-preview-label">${t.pdfDemo.captureLabel}</p>
             <div class="pdf-invoice-wrapper">
               <div id="invoice-card" class="invoice-card">
                 ${buildInvoiceHTML(logoUrl)}
@@ -205,12 +204,15 @@ export function renderPdfDemo(container: HTMLElement): void {
               </div>
               <p id="pdfStatus" class="pdf-status"></p>
             </div>
-            <div id="pdfPreviewBox" class="pdf-preview-box" style="display:none">
-              <p class="pdf-preview-label">${t.pdfDemo.lastPdf}</p>
-              <iframe id="pdfPreviewFrame" class="pdf-preview-iframe" title="PDF Preview"></iframe>
-              <div class="pdf-preview-actions">
-                <button type="button" id="btnOpenPDF" class="btn-ghost">${t.pdfDemo.openNewTab}</button>
-              </div>
+          </div>
+          <div id="pdfPreviewBox" class="pdf-preview-box" style="display:none">
+            <div class="pdf-preview-topbar">
+              <p class="pdf-preview-label" style="margin:0">${t.pdfDemo.lastPdf}</p>
+              <button type="button" id="btnClosePreviewPDF" class="pdf-preview-close" title="Close">✕</button>
+            </div>
+            <iframe id="pdfPreviewFrame" class="pdf-preview-iframe" title="PDF Preview"></iframe>
+            <div class="pdf-preview-actions">
+              <button type="button" id="btnOpenPDF" class="btn-ghost">${t.pdfDemo.openNewTab}</button>
             </div>
           </div>
         </div>
@@ -285,12 +287,16 @@ export function renderPdfDemo(container: HTMLElement): void {
         const blob = await capturePDF('#invoice-card', opts);
         lastBlobUrl = URL.createObjectURL(blob);
 
+        const layout       = document.getElementById('pdfDemoLayout');
         const previewBox   = document.getElementById('pdfPreviewBox');
         const previewFrame = document.getElementById('pdfPreviewFrame') as HTMLIFrameElement | null;
         if (previewBox && previewFrame) {
-          previewBox.style.display = 'block';
+          if (layout) layout.classList.add('has-preview');
+          previewBox.style.display = 'flex';
           previewFrame.src = lastBlobUrl;
-          previewBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          if (window.innerWidth <= 1024) {
+            previewBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
 
         setStatus(`✓ ${(blob.size / 1024).toFixed(1)} KB · ${pageSize} · ${scale}x`);
@@ -301,6 +307,16 @@ export function renderPdfDemo(container: HTMLElement): void {
         setStatus(`✕ ${msg}`);
       } finally {
         setPreviewing(false);
+      }
+    });
+
+    // ── Close preview button ───────────────────────────────────────────────
+    document.getElementById('btnClosePreviewPDF')?.addEventListener('click', () => {
+      const layout     = document.getElementById('pdfDemoLayout');
+      const previewBox = document.getElementById('pdfPreviewBox');
+      if (previewBox) {
+        previewBox.style.display = 'none';
+        if (layout) layout.classList.remove('has-preview');
       }
     });
 
