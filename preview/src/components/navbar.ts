@@ -19,6 +19,7 @@ export function renderNavbar(container: HTMLElement): void {
           <a href="#pdf-demo">PDF Demo</a>
           <a href="#features">${t.nav.features}</a>
           <a href="#usage">${t.nav.usage}</a>
+          <a href="https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm" target="_blank" rel="noopener noreferrer" class="nav-extension-link" title="Chrome Extension">${t.nav.extension}</a>
           <a href="https://www.npmjs.com/package/sharedom" target="_blank" rel="noopener">${t.nav.npm}</a>
           <a href="https://github.com/Erickgiber/sharedom" target="_blank" rel="noopener">${t.nav.github}</a>
         </div>

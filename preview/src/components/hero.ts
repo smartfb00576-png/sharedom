@@ -11,6 +11,14 @@ export function renderHero(container: HTMLElement): void {
       <section class="hero">
         <div class="hero-glow"></div>
         <div class="hero-inner anim-in" data-anim-key="hero-inner">
+          <a href="https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm" target="_blank" rel="noopener noreferrer" class="hero-extension-pill" title="${t.hero.extensionAvailable}">
+            <span class="pill-badge">${t.hero.extensionPill}</span>
+            <span class="pill-text">${t.hero.extensionAvailable}</span>
+            <svg class="pill-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </a>
           <h1>${t.hero.titleMain} <em>${t.hero.titleEm}</em><br>${t.hero.titleEnd}</h1>
           <p class="hero-sub">${t.hero.subtitle}</p>
           <div class="hero-actions">

@@ -5,12 +5,15 @@ export const en = {
     features: 'Features',
     playground: 'Playground',
     usage: 'Usage',
+    extension: 'Chrome Extension ↗',
     npm: 'NPM ↗',
     github: 'GitHub ↗',
     buyCoffee: '☕ Buy me a coffee',
     getStarted: 'Get Started',
   },
   hero: {
+    extensionPill: 'Now on Chrome Web Store',
+    extensionAvailable: 'Also available as a Chrome Extension',
     titleMain: 'Screenshot',
     titleEm: 'anything',
     titleEnd: 'in the browser & server.',
@@ -160,5 +163,18 @@ export const en = {
     openSourceText: 'ShareDOM is free and open-source software released under the MIT License. The entire source code is publicly accessible and auditable on GitHub at',
     contactTitle: 'Questions & Support',
     contactText: 'If you have any questions, feedback, or concerns regarding this Privacy Policy or the security of ShareDOM, feel free to open an issue on the official GitHub repository.'
+  },
+  telemetryDemo: {
+    title: 'Console & Network Screenshot',
+    subtitle: 'Capture console logs and HTTP requests as styled tables in PNG, WebP or PDF.',
+    btnSimulateLogs: 'Generate Sample Logs',
+    btnSimulateNetwork: 'Simulate Network Requests',
+    btnCaptureLogs: 'Capture Logs Image',
+    btnDownloadLogsPdf: 'Download Logs PDF',
+    btnCaptureNetwork: 'Capture Network Image',
+    btnDownloadNetworkPdf: 'Download Network PDF',
+    resultTitle: 'Capture Preview',
+    copyBase64: 'Copy Base64',
+    copied: 'Copied to clipboard!',
   }
 };

@@ -6,39 +6,6 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-function arrayBufferToBase64(buffer: ArrayBuffer): string {
-  let binary = '';
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
-
-async function fetchImageAsDataUrlInBackground(url: string): Promise<{ dataUrl?: string; error?: string }> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      return { error: `HTTP ${response.status}` };
-    }
-    const contentType = response.headers.get('content-type') || 'image/png';
-    const buffer = await response.arrayBuffer();
-    const base64 = arrayBufferToBase64(buffer);
-    const dataUrl = `data:${contentType};base64,${base64}`;
-    return { dataUrl };
-  } catch (err) {
-    return { error: String(err) };
-  }
-}
-
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message && message.type === 'SHAREDOM_FETCH_IMAGE' && typeof message.url === 'string') {
-    fetchImageAsDataUrlInBackground(message.url).then(sendResponse);
-    return true;
-  }
-});
-
 function isUrlRestricted(url?: string): boolean {
   if (!url) return true;
   const restricted = [

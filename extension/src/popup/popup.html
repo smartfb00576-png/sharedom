@@ -66,21 +66,50 @@
         </div>
       </div>
 
-      <button id="inspect-btn" class="cta-button">
-        <div class="cta-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="22" y1="12" x2="18" y2="12"></line>
-            <line x1="6" y1="12" x2="2" y2="12"></line>
-            <line x1="12" y1="6" x2="12" y2="2"></line>
-            <line x1="12" y1="22" x2="12" y2="18"></line>
-          </svg>
-        </div>
-        <div class="cta-text">
-          <span id="cta-title" class="cta-title">Inspect DOM Element</span>
-          <span id="cta-subtitle" class="cta-subtitle">Hover & click any element on the page</span>
-        </div>
-      </button>
+      <div class="actions-vertical-stack">
+        <button id="inspect-btn" class="cta-button">
+          <div class="cta-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="22" y1="12" x2="18" y2="12"></line>
+              <line x1="6" y1="12" x2="2" y2="12"></line>
+              <line x1="12" y1="6" x2="12" y2="2"></line>
+              <line x1="12" y1="22" x2="12" y2="18"></line>
+            </svg>
+          </div>
+          <div class="cta-text">
+            <span id="cta-title" class="cta-title">Inspect DOM Element</span>
+            <span id="cta-subtitle" class="cta-subtitle">Hover & click any element on the page</span>
+          </div>
+        </button>
+
+        <button id="capture-console-btn" class="special-btn">
+          <div class="special-btn-icon icon-console">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
+          <div class="special-btn-text">
+            <span id="btn-console-title" class="special-btn-title">Capture Console Logs</span>
+            <span id="btn-console-subtitle" class="special-btn-subtitle">Export terminal logs as image or PDF</span>
+          </div>
+        </button>
+
+        <button id="capture-network-btn" class="special-btn">
+          <div class="special-btn-icon icon-network">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <div class="special-btn-text">
+            <span id="btn-network-title" class="special-btn-title">Capture Network Requests</span>
+            <span id="btn-network-subtitle" class="special-btn-subtitle">Export API calls, status & duration</span>
+          </div>
+        </button>
+      </div>
 
       <section class="section">
         <span id="txt-default-settings" class="section-title">Default Settings</span>
@@ -154,6 +183,6 @@
     </footer>
   </div>
 
-  <script src="popup.js" type="module"></script>
+  <script src="popup.js"></script>
 </body>
 </html>

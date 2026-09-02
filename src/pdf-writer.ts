@@ -233,3 +233,174 @@ export function buildPdf(jpegBytes: Uint8Array, opts: PdfBuildOptions): Uint8Arr
 
     return concat(...parts);
 }
+
+export interface MultiPagePdfBuildOptions extends Omit<PdfBuildOptions, 'jpegBytes' | 'imageWidthPx' | 'imageHeightPx'> {
+    pages: {
+        jpegBytes: Uint8Array;
+        imageWidthPx: number;
+        imageHeightPx: number;
+    }[];
+}
+
+export function buildMultiPagePdf(opts: MultiPagePdfBuildOptions): Uint8Array {
+    const {
+        pages,
+        dpi = 96,
+        pageSize = 'auto',
+        orientation = 'portrait',
+        margin = 0,
+        title = '',
+        author = '',
+        subject = '',
+        keywords,
+    } = opts;
+
+    if (!pages || pages.length === 0) {
+        return buildPdf(new Uint8Array(), {
+            imageWidthPx: 100,
+            imageHeightPx: 100,
+            ...opts,
+        });
+    }
+
+    if (pages.length === 1) {
+        return buildPdf(pages[0].jpegBytes, {
+            imageWidthPx: pages[0].imageWidthPx,
+            imageHeightPx: pages[0].imageHeightPx,
+            ...opts,
+        });
+    }
+
+    const pxToPt = 72 / dpi;
+    const now = new Date();
+    const dateStr = pdfDate(now);
+
+    const hasMetadata = Boolean(title || author || subject || (keywords && (Array.isArray(keywords) ? keywords.length > 0 : Boolean(keywords))));
+    const infoObjId = hasMetadata ? 3 + pages.length * 3 : null;
+    const totalObjects = infoObjId ? infoObjId + 1 : 3 + pages.length * 3;
+
+    const offsets: number[] = new Array(totalObjects).fill(0);
+    const parts: Uint8Array[] = [];
+
+    const header = str('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    parts.push(header);
+    let pos = header.length;
+
+    function addObject(id: number, body: string): void {
+        offsets[id] = pos;
+        const chunk = str(`${id} 0 obj\n${body}\nendobj\n`);
+        parts.push(chunk);
+        pos += chunk.length;
+    }
+
+    addObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+
+    const kidsArray: string[] = [];
+    for (let i = 0; i < pages.length; i++) {
+        const pageId = 3 + i * 3;
+        kidsArray.push(`${pageId} 0 R`);
+    }
+    addObject(2, `<< /Type /Pages /Kids [${kidsArray.join(' ')}] /Count ${pages.length} >>`);
+
+    for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        const pageId = 3 + i * 3;
+        const contentId = 4 + i * 3;
+        const imgId = 5 + i * 3;
+
+        const imgWidthPt = page.imageWidthPx * pxToPt;
+        const imgHeightPt = page.imageHeightPx * pxToPt;
+
+        let pageWidthPt: number;
+        let pageHeightPt: number;
+
+        if (pageSize === 'auto') {
+            pageWidthPt = imgWidthPt + margin * 2;
+            pageHeightPt = imgHeightPt + margin * 2;
+        } else {
+            let preset = { ...PAGE_PRESETS[pageSize] };
+            if (orientation === 'landscape' && preset.width < preset.height) {
+                preset = { width: preset.height, height: preset.width };
+            } else if (orientation === 'portrait' && preset.width > preset.height) {
+                preset = { width: preset.height, height: preset.width };
+            }
+            pageWidthPt = preset.width;
+            pageHeightPt = preset.height;
+        }
+
+        const availableWidth = pageWidthPt - margin * 2;
+        const availableHeight = pageHeightPt - margin * 2;
+
+        let drawWidthPt = imgWidthPt;
+        let drawHeightPt = imgHeightPt;
+
+        if (pageSize !== 'auto') {
+            const scaleX = availableWidth / imgWidthPt;
+            const scaleY = availableHeight / imgHeightPt;
+            const fitScale = Math.min(scaleX, scaleY, 1);
+            drawWidthPt = imgWidthPt * fitScale;
+            drawHeightPt = imgHeightPt * fitScale;
+        }
+
+        const xOff = margin + (availableWidth - drawWidthPt) / 2;
+        const yOff = margin + (availableHeight - drawHeightPt) / 2;
+
+        const mediaBox = `[0 0 ${num(pageWidthPt)} ${num(pageHeightPt)}]`;
+        addObject(pageId,
+            `<< /Type /Page /Parent 2 0 R /MediaBox ${mediaBox} ` +
+            `/Contents ${contentId} 0 R /Resources << /XObject << /Img ${imgId} 0 R >> >> >>`
+        );
+
+        const contentInner =
+            `${num(drawWidthPt)} 0 0 ${num(drawHeightPt)} ${num(xOff)} ${num(yOff)} cm /Img Do`;
+        const contentBody = `q\n${contentInner}\nQ`;
+        addObject(contentId,
+            `<< /Length ${contentBody.length} >>\nstream\n${contentBody}\nendstream`
+        );
+
+        offsets[imgId] = pos;
+        const imgDictAndStream = str(
+            `${imgId} 0 obj\n` +
+            `<< /Type /XObject /Subtype /Image ` +
+            `/Width ${page.imageWidthPx} /Height ${page.imageHeightPx} ` +
+            `/ColorSpace /DeviceRGB /BitsPerComponent 8 ` +
+            `/Filter /DCTDecode /Length ${page.jpegBytes.length} >>\n` +
+            `stream\n`
+        );
+        const imgFooter = str(`\nendstream\nendobj\n`);
+        const imageObj = concat(imgDictAndStream, page.jpegBytes, imgFooter);
+        parts.push(imageObj);
+        pos += imageObj.length;
+    }
+
+    if (hasMetadata && infoObjId) {
+        const entries: string[] = [];
+        if (title) entries.push(`/Title ${encodePdfString(title)}`);
+        if (author) entries.push(`/Author ${encodePdfString(author)}`);
+        if (subject) entries.push(`/Subject ${encodePdfString(subject)}`);
+        if (keywords) {
+            const kwStr = Array.isArray(keywords) ? keywords.join(', ') : keywords;
+            if (kwStr) entries.push(`/Keywords ${encodePdfString(kwStr)}`);
+        }
+        entries.push(`/Creator (sharedom)`);
+        entries.push(`/Producer (sharedom)`);
+        entries.push(`/CreationDate (${dateStr})`);
+        entries.push(`/ModDate (${dateStr})`);
+        addObject(infoObjId, `<<\n  ${entries.join('\n  ')}\n>>`);
+    }
+
+    const xrefOffset = pos;
+    let xref = `xref\n0 ${totalObjects}\n`;
+    xref += '0000000000 65535 f \n';
+    for (let i = 1; i < totalObjects; i++) {
+        xref += `${pad10(offsets[i])} 00000 n \n`;
+    }
+    const trailerInfo = infoObjId ? ` /Info ${infoObjId} 0 R` : '';
+    xref +=
+        `trailer\n<< /Size ${totalObjects} /Root 1 0 R${trailerInfo} >>\n` +
+        `startxref\n${xrefOffset}\n%%EOF\n`;
+
+    parts.push(str(xref));
+
+    return concat(...parts);
+}

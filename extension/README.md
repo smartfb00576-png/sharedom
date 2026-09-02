@@ -1,6 +1,12 @@
 # sharedom — Chrome Extension (DOM Screenshot Inspector)
 
-Extensión profesional para Google Chrome basada en la librería **`sharedom`**. Permite inspeccionar interactivamente cualquier página web, resaltar contenedores del DOM en hover y capturar elementos con un solo clic para copiarlos al portapapeles o descargarlos en alta resolución.
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Instalar-blue?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm)
+[![NPM Library](https://img.shields.io/badge/NPM_Library-sharedom-red?logo=npm&logoColor=white)](https://www.npmjs.com/package/sharedom)
+
+Extensión profesional para Google Chrome basada en el motor de la librería **`sharedom`**. Permite inspeccionar interactivamente cualquier página web, resaltar contenedores del DOM en hover, y capturar elementos, registros de consola y peticiones de red con un solo clic para copiarlos al portapapeles o descargarlos en alta resolución.
+
+> 🌐 **Instálala directamente desde la Chrome Web Store:**  
+> [**Descargar ShareDOM para Chrome**](https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm)
 
 ---
 
@@ -15,12 +21,16 @@ Extensión profesional para Google Chrome basada en la librería **`sharedom`**.
   - `Alt + Shift + S` (o `Cmd + Shift + S` en macOS): Atajo global para activar el inspector en la pestaña activa.
 - 🛡️ **Aislamiento con Shadow DOM**: La interfaz y overlays de la extensión no interfieren con el CSS de la página web ni son capturados en la imagen final.
 - 📋 **Copiar al portapapeles**: Copia la imagen PNG directamente al portapapeles del sistema operativo (`navigator.clipboard.write`).
-- 💾 **Descarga instantánea**: Descarga capturas optimizadas con nombres semánticos (ej. `domsnap-div-card-20260830.png`).
+- 💾 **Descarga instantánea & ZIP Multipágina**: Descarga capturas optimizadas. Si la captura contiene múltiples páginas de red o consola, las empaqueta automáticamente en un archivo `.zip` comprimido con cero dependencias.
+- 📊 **Captura de Consola y Red**: Exporta los registros de la consola del navegador y tablas de peticiones HTTP (método, endpoint, status, duración) como imágenes compactas (12-15 filas por página), documentos PDF multipágina o archivos ZIP.
+- 📄 **Exportación a PDF**: Descarga cualquier elemento o captura especializada directamente como documento PDF formateado.
 - 🎨 **Controles en tiempo real**:
   - **Resolución**: `1x`, `2x (Retina HD)`, `3x (Ultra HD)`.
   - **Formato**: `PNG` (con canal alfa), `JPEG`, `WebP`.
   - **Fondo**: `Transparente`, `Blanco`, `Oscuro` o `Color personalizado`.
+- 🌐 **Soporte Bilingüe (EN / ES)**: Cambio instantáneo de idioma en popup y modales.
 - ⚡ **Zero dependencias externas**: Motor de renderizado `sharedom` autónomo mediante SVG `foreignObject` y Canvas nativo.
+- 🧩 **Librería NPM disponible**: Todas las funciones de captura de elementos, consola, red, PDF y ZIP también están disponibles programáticamente vía `npm i sharedom`.
 
 ---
 

@@ -16,6 +16,7 @@ export function renderFooter(container: HTMLElement): void {
         </div>
         <div class="footer-links">
           <a href="#/privacy" class="footer-privacy-link">${t.footer.privacy}</a>
+          <a href="https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm" target="_blank" rel="noopener noreferrer">Chrome Extension ↗</a>
           <a href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener" class="footer-coffee-link">☕ ${t.nav.buyCoffee.replace('☕ ', '')}</a>
           <a href="https://www.npmjs.com/package/sharedom" target="_blank" rel="noopener">NPM ↗</a>
           <a href="https://github.com/Erickgiber/sharedom" target="_blank" rel="noopener">GitHub ↗</a>

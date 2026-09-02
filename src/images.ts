@@ -1,35 +1,6 @@
-async function fetchUrlViaChromeExtension(url: string): Promise<string | null> {
-    if (typeof chrome === 'undefined' || !chrome.runtime?.sendMessage) {
-        return null;
-    }
-
-    try {
-        const response = await new Promise<{ dataUrl?: string; error?: string }>((resolve) => {
-            chrome.runtime.sendMessage({ type: 'SHAREDOM_FETCH_IMAGE', url }, (res) => {
-                if (chrome.runtime.lastError || !res) {
-                    resolve({});
-                } else {
-                    resolve(res);
-                }
-            });
-        });
-
-        if (response?.dataUrl && response.dataUrl.startsWith('data:')) {
-            return response.dataUrl;
-        }
-    } catch {}
-
-    return null;
-}
-
 export async function fetchUrlAsDataUrl(url: string): Promise<string> {
     if (!url || url.startsWith('data:')) {
         return url;
-    }
-
-    const extensionDataUrl = await fetchUrlViaChromeExtension(url);
-    if (extensionDataUrl) {
-        return extensionDataUrl;
     }
 
     try {

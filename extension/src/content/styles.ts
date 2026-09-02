@@ -479,6 +479,23 @@ export const overlayStyles = `
   border-color: rgba(255, 255, 255, 0.18);
 }
 
+.sharedom-btn-copylogs {
+  background: rgba(167, 139, 250, 0.12);
+  color: #c4b5fd;
+  border: 1px solid rgba(167, 139, 250, 0.28);
+}
+
+.sharedom-btn-copylogs:hover {
+  background: rgba(167, 139, 250, 0.22);
+  color: #ffffff;
+  border-color: rgba(167, 139, 250, 0.5);
+  transform: translateY(-1px);
+}
+
+.sharedom-btn-copylogs:active {
+  transform: translateY(0);
+}
+
 .sharedom-btn-pdf {
   background: rgba(239, 68, 68, 0.12);
   color: #f87171;
@@ -607,6 +624,75 @@ export const overlayStyles = `
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.sharedom-pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.sharedom-page-btn {
+  background: #1e1e2c;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.sharedom-page-btn:hover:not(:disabled) {
+  background: #2a2a3e;
+  border-color: rgba(167, 139, 250, 0.4);
+  transform: translateY(-1px);
+}
+
+.sharedom-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.sharedom-page-indicator {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-width: 60px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .sharedom-modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+  .sharedom-footer-left,
+  .sharedom-footer-right {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    gap: 8px;
+  }
+  .sharedom-footer-left .sharedom-btn,
+  .sharedom-footer-right .sharedom-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 12px;
   }
 }
 `;

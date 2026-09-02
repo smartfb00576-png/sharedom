@@ -1,11 +1,95 @@
 import { OverlayManager } from './overlay';
-import { ActionModal, ModalOptions } from './modal';
-import { ExtensionLanguage } from '../shared/i18n';
+import { ActionModal } from './modal';
+import { ExtensionLanguage, translations } from '../shared/i18n';
+import {
+  getConsoleLogs,
+  getNetworkRequests,
+  createConsoleLogsElement,
+  createNetworkRequestsElement,
+  chunkItems,
+  startConsoleCapture,
+  startNetworkCapture,
+  ConsoleLogEntry,
+  NetworkRequestEntry,
+} from '../../../src/index';
 
 export interface InspectorStartOptions {
   scale?: number;
   format?: 'png' | 'jpeg' | 'webp';
   language?: ExtensionLanguage;
+}
+
+const pageLogs: ConsoleLogEntry[] = [];
+const pageRequests: NetworkRequestEntry[] = [];
+
+if (typeof window !== 'undefined') {
+  startConsoleCapture();
+  startNetworkCapture();
+
+  const handlePageLog = (e: Event) => {
+    let detail = (e as CustomEvent).detail;
+    if (typeof detail === 'string') {
+      try { detail = JSON.parse(detail); } catch {}
+    }
+    if (!detail || !detail.message) return;
+
+    const last = pageLogs[pageLogs.length - 1];
+    if (last && last.level === detail.level && last.message === detail.message) {
+      if (last.timestamp === detail.timestamp) return;
+      last.count = (last.count || 1) + (detail.count || 1);
+      last.timestamp = detail.timestamp || Date.now();
+      return;
+    }
+    const exists = pageLogs.some((l) => l.timestamp === detail.timestamp && l.message === detail.message);
+    if (exists) return;
+
+    pageLogs.push(detail);
+    if (pageLogs.length > 200) pageLogs.shift();
+  };
+
+  window.addEventListener('__sharedom_page_log__', handlePageLog);
+  document.addEventListener('__sharedom_page_log__', handlePageLog);
+
+  const handlePageReq = (e: Event) => {
+    let detail = (e as CustomEvent).detail;
+    if (typeof detail === 'string') {
+      try { detail = JSON.parse(detail); } catch {}
+    }
+    if (!detail || !detail.url) return;
+
+    const exists = pageRequests.some((r) => r.timestamp === detail.timestamp && r.url === detail.url && r.method === detail.method);
+    if (exists) return;
+
+    pageRequests.push(detail);
+    if (pageRequests.length > 200) pageRequests.shift();
+  };
+
+  window.addEventListener('__sharedom_page_req__', handlePageReq);
+  document.addEventListener('__sharedom_page_req__', handlePageReq);
+
+  try {
+    const syncEv = new CustomEvent('__sharedom_request_sync__');
+    window.dispatchEvent(syncEv);
+    document.dispatchEvent(syncEv);
+  } catch {}
+}
+
+export function installPageTracker(): void {
+  if (typeof document === 'undefined' || document.getElementById('__sharedom_page_tracker__')) {
+    return;
+  }
+  try {
+    const script = document.createElement('script');
+    script.id = '__sharedom_page_tracker__';
+    script.src = chrome.runtime.getURL('page-tracker.js');
+    script.onload = () => {
+      try { script.remove(); } catch (_) {}
+    };
+    script.onerror = () => {
+      try { script.remove(); } catch (_) {}
+    };
+    (document.head || document.documentElement).appendChild(script);
+  } catch (_) {}
 }
 
 export class DomInspector {
@@ -15,6 +99,7 @@ export class DomInspector {
   private isModalOpen = false;
   private hoveredElement: HTMLElement | null = null;
   private selectedElement: HTMLElement | null = null;
+  private temporaryWrapper: HTMLElement | null = null;
   private currentLanguage: ExtensionLanguage = 'en';
 
   private onMouseMoveBound = this.onMouseMove.bind(this);
@@ -23,14 +108,7 @@ export class DomInspector {
   private onKeyDownBound = this.onKeyDown.bind(this);
   private onScrollBound = this.onScroll.bind(this);
 
-  public async start(options?: InspectorStartOptions): Promise<void> {
-    if (this.isActive) return;
-
-    this.isActive = true;
-    this.isModalOpen = false;
-    this.hoveredElement = null;
-    this.selectedElement = null;
-
+  private async initOverlayAndModal(options?: InspectorStartOptions): Promise<{ scale: number; format: 'png' | 'jpeg' | 'webp' }> {
     let scale = options?.scale ?? 2;
     let format = options?.format ?? 'png';
     let language = options?.language;
@@ -61,13 +139,7 @@ export class DomInspector {
     }
 
     const shadow = this.overlay.getShadowRoot();
-    if (shadow) {
-      const modalOptions: Partial<ModalOptions> = {
-        scale,
-        format,
-        language: this.currentLanguage,
-      };
-
+    if (shadow && !this.modal) {
       this.modal = new ActionModal(
         shadow,
         {
@@ -75,12 +147,114 @@ export class DomInspector {
           onReselect: () => this.resumeInspection(),
           onToast: (msg, icon) => this.overlay?.showToast(msg, icon),
         },
-        modalOptions
+        { scale, format, language: this.currentLanguage }
       );
+    } else if (this.modal) {
+      this.modal.setOptions({ scale, format, language: this.currentLanguage });
     }
 
-    this.overlay.showStatusPill(() => this.stop(), this.currentLanguage);
+    return { scale, format };
+  }
+
+  public async start(options?: InspectorStartOptions): Promise<void> {
+    if (this.isActive) return;
+
+    this.isActive = true;
+    this.isModalOpen = false;
+    this.hoveredElement = null;
+    this.selectedElement = null;
+
+    await this.initOverlayAndModal(options);
+    this.overlay?.showStatusPill(() => this.stop(), this.currentLanguage);
     this.attachEvents();
+  }
+
+  public async captureConsole(options?: InspectorStartOptions): Promise<void> {
+    try {
+      const syncEv = new CustomEvent('__sharedom_request_sync__');
+      window.dispatchEvent(syncEv);
+      document.dispatchEvent(syncEv);
+    } catch {}
+
+    this.stop();
+    this.isActive = true;
+    this.isModalOpen = true;
+
+    await this.initOverlayAndModal(options);
+
+    const logs = pageLogs.length > 0 ? pageLogs : getConsoleLogs();
+    const chunks = chunkItems(logs, 15);
+
+    this.temporaryWrapper = document.createElement('div');
+    this.temporaryWrapper.style.position = 'fixed';
+    this.temporaryWrapper.style.top = '-99999px';
+    this.temporaryWrapper.style.left = '-99999px';
+    this.temporaryWrapper.style.opacity = '0';
+    this.temporaryWrapper.style.pointerEvents = 'none';
+    this.temporaryWrapper.style.zIndex = '-9999';
+
+    const chunkElements: HTMLElement[] = [];
+    chunks.forEach((chunk, i) => {
+      const el = createConsoleLogsElement(chunk, {
+        language: this.currentLanguage,
+        pageIndex: i + 1,
+        totalPages: chunks.length,
+        startIndex: i * 15,
+        totalItems: logs.length,
+      });
+      chunkElements.push(el);
+      this.temporaryWrapper!.appendChild(el);
+    });
+    document.body.appendChild(this.temporaryWrapper);
+
+    this.selectedElement = chunkElements[0];
+    if (this.modal) {
+      await this.modal.show(chunkElements[0], 'console', chunkElements, logs);
+    }
+  }
+
+  public async captureNetwork(options?: InspectorStartOptions): Promise<void> {
+    try {
+      const syncEv = new CustomEvent('__sharedom_request_sync__');
+      window.dispatchEvent(syncEv);
+      document.dispatchEvent(syncEv);
+    } catch {}
+
+    this.stop();
+    this.isActive = true;
+    this.isModalOpen = true;
+
+    await this.initOverlayAndModal(options);
+
+    const requests = pageRequests.length > 0 ? pageRequests : getNetworkRequests();
+    const chunks = chunkItems(requests, 12);
+
+    this.temporaryWrapper = document.createElement('div');
+    this.temporaryWrapper.style.position = 'fixed';
+    this.temporaryWrapper.style.top = '-99999px';
+    this.temporaryWrapper.style.left = '-99999px';
+    this.temporaryWrapper.style.opacity = '0';
+    this.temporaryWrapper.style.pointerEvents = 'none';
+    this.temporaryWrapper.style.zIndex = '-9999';
+
+    const chunkElements: HTMLElement[] = [];
+    chunks.forEach((chunk, i) => {
+      const el = createNetworkRequestsElement(chunk, {
+        language: this.currentLanguage,
+        pageIndex: i + 1,
+        totalPages: chunks.length,
+        startIndex: i * 12,
+        totalItems: requests.length,
+      });
+      chunkElements.push(el);
+      this.temporaryWrapper!.appendChild(el);
+    });
+    document.body.appendChild(this.temporaryWrapper);
+
+    this.selectedElement = chunkElements[0];
+    if (this.modal) {
+      await this.modal.show(chunkElements[0], 'network', chunkElements, requests);
+    }
   }
 
   public stop(): void {
@@ -91,6 +265,11 @@ export class DomInspector {
     this.isModalOpen = false;
     this.hoveredElement = null;
     this.selectedElement = null;
+
+    if (this.temporaryWrapper && this.temporaryWrapper.parentNode) {
+      this.temporaryWrapper.parentNode.removeChild(this.temporaryWrapper);
+      this.temporaryWrapper = null;
+    }
 
     if (this.modal) {
       this.modal.hide();
@@ -171,7 +350,7 @@ export class DomInspector {
     }
   }
 
-  private onClick(e: MouseEvent): void {
+  private async onClick(e: MouseEvent): Promise<void> {
     if (!this.isActive) return;
     if (this.isExtensionElement(e.target)) return;
 
@@ -191,11 +370,11 @@ export class DomInspector {
     this.overlay?.hideStatusPill();
 
     if (this.modal) {
-      this.modal.show(this.selectedElement);
+      await this.modal.show(this.selectedElement, 'element');
     }
   }
 
-  private onKeyDown(e: KeyboardEvent): void {
+  private async onKeyDown(e: KeyboardEvent): Promise<void> {
     if (!this.isActive) return;
 
     if (e.key === 'Escape') {
@@ -216,8 +395,9 @@ export class DomInspector {
         this.isModalOpen = true;
         this.overlay?.hideHighlight();
         this.overlay?.hideStatusPill();
+
         if (this.modal) {
-          this.modal.show(this.selectedElement);
+          await this.modal.show(this.selectedElement, 'element');
         }
       }
       return;

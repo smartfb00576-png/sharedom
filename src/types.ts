@@ -1,3 +1,5 @@
+export type Language = 'en' | 'es';
+
 export interface CaptureOptions {
     scale?: number;
     backgroundColor?: string;
@@ -6,6 +8,7 @@ export interface CaptureOptions {
     width?: number;
     height?: number;
     optimize?: boolean;
+    language?: Language;
 }
 
 export type DomTarget = string | HTMLElement;
@@ -72,4 +75,62 @@ export interface PdfOptions {
 
     /** Keywords written into the PDF Info dictionary. */
     keywords?: string | string[];
+
+    language?: Language;
 }
+
+export type LogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug';
+
+export interface ConsoleLogEntry {
+    level: LogLevel;
+    message: string;
+    timestamp: number;
+    count?: number;
+}
+
+export interface ConsoleCaptureOptions extends CaptureOptions {
+    logs?: ConsoleLogEntry[];
+    title?: string;
+    maxEntries?: number;
+    entriesPerPage?: number;
+}
+
+export interface ConsolePdfOptions extends PdfOptions {
+    logs?: ConsoleLogEntry[];
+    title?: string;
+    maxEntries?: number;
+    entriesPerPage?: number;
+}
+
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | string;
+
+export interface NetworkRequestEntry {
+    method: HttpMethod;
+    url: string;
+    name: string;
+    status: number | string;
+    statusText?: string;
+    type?: string;
+    duration?: number;
+    timestamp: number;
+}
+
+export interface NetworkCaptureOptions extends CaptureOptions {
+    requests?: NetworkRequestEntry[];
+    title?: string;
+    maxEntries?: number;
+    entriesPerPage?: number;
+}
+
+export interface NetworkPdfOptions extends PdfOptions {
+    requests?: NetworkRequestEntry[];
+    title?: string;
+    maxEntries?: number;
+    entriesPerPage?: number;
+}
+
+export interface ZipFileInput {
+    name: string;
+    data: Uint8Array | ArrayBuffer | string;
+}
+

@@ -1,6 +1,13 @@
 import { translations, ExtensionLanguage } from '../shared/i18n';
 
 const inspectBtn = document.getElementById('inspect-btn') as HTMLButtonElement;
+const captureConsoleBtn = document.getElementById('capture-console-btn') as HTMLButtonElement;
+const captureNetworkBtn = document.getElementById('capture-network-btn') as HTMLButtonElement;
+const btnConsoleTitle = document.getElementById('btn-console-title') as HTMLElement;
+const btnConsoleSubtitle = document.getElementById('btn-console-subtitle') as HTMLElement;
+const btnNetworkTitle = document.getElementById('btn-network-title') as HTMLElement;
+const btnNetworkSubtitle = document.getElementById('btn-network-subtitle') as HTMLElement;
+
 const scaleSelect = document.getElementById('scale-select') as HTMLSelectElement;
 const formatSelect = document.getElementById('format-select') as HTMLSelectElement;
 const langToggleBtn = document.getElementById('lang-toggle-btn') as HTMLButtonElement;
@@ -76,6 +83,8 @@ function updateBannerUI(): void {
     if (bannerDesc) bannerDesc.textContent = t.restrictedPageDesc;
     if (bannerActions) bannerActions.style.display = 'none';
     if (inspectBtn) inspectBtn.disabled = true;
+    if (captureConsoleBtn) captureConsoleBtn.disabled = true;
+    if (captureNetworkBtn) captureNetworkBtn.disabled = true;
   } else if (hasPermissionError) {
     if (statusBanner) {
       statusBanner.style.display = 'flex';
@@ -89,9 +98,13 @@ function updateBannerUI(): void {
     if (bannerRetryBtn) bannerRetryBtn.textContent = t.btnRetry;
     if (bannerReloadBtn) bannerReloadBtn.textContent = t.btnReloadTab;
     if (inspectBtn) inspectBtn.disabled = false;
+    if (captureConsoleBtn) captureConsoleBtn.disabled = false;
+    if (captureNetworkBtn) captureNetworkBtn.disabled = false;
   } else {
     if (statusBanner) statusBanner.style.display = 'none';
     if (inspectBtn) inspectBtn.disabled = false;
+    if (captureConsoleBtn) captureConsoleBtn.disabled = false;
+    if (captureNetworkBtn) captureNetworkBtn.disabled = false;
   }
 }
 
@@ -105,6 +118,11 @@ function applyLanguage(lang: ExtensionLanguage): void {
 
   if (ctaTitle) ctaTitle.textContent = t.ctaTitle;
   if (ctaSubtitle) ctaSubtitle.textContent = t.ctaSubtitle;
+  if (btnConsoleTitle) btnConsoleTitle.textContent = t.btnConsoleLogs;
+  if (btnConsoleSubtitle) btnConsoleSubtitle.textContent = t.btnConsoleLogsSubtitle;
+  if (btnNetworkTitle) btnNetworkTitle.textContent = t.btnNetworkRequests;
+  if (btnNetworkSubtitle) btnNetworkSubtitle.textContent = t.btnNetworkRequestsSubtitle;
+
   if (txtDefaultSettings) txtDefaultSettings.textContent = t.defaultSettings;
   if (txtResolutionLabel) txtResolutionLabel.textContent = t.resolution;
   if (txtFormatLabel) txtFormatLabel.textContent = t.format;
@@ -138,20 +156,40 @@ function applyLanguage(lang: ExtensionLanguage): void {
   updateBannerUI();
 }
 
+function initFastSettings(): void {
+  try {
+    const cachedLang = localStorage.getItem('sharedom_lang') as ExtensionLanguage | null;
+    if (cachedLang === 'en' || cachedLang === 'es') {
+      applyLanguage(cachedLang);
+    }
+    const cachedScale = localStorage.getItem('sharedom_scale');
+    if (cachedScale && scaleSelect) {
+      scaleSelect.value = cachedScale;
+    }
+    const cachedFormat = localStorage.getItem('sharedom_format');
+    if (cachedFormat && formatSelect) {
+      formatSelect.value = cachedFormat;
+    }
+  } catch {}
+}
+
 async function loadSettings(): Promise<void> {
   try {
     const data = await chrome.storage.local.get(['language', 'defaultScale', 'defaultFormat']);
     if (data.language === 'en' || data.language === 'es') {
       applyLanguage(data.language);
-    } else {
+      try { localStorage.setItem('sharedom_lang', data.language); } catch {}
+    } else if (!localStorage.getItem('sharedom_lang')) {
       applyLanguage('en');
     }
 
     if (data.defaultScale && scaleSelect) {
       scaleSelect.value = String(data.defaultScale);
+      try { localStorage.setItem('sharedom_scale', String(data.defaultScale)); } catch {}
     }
     if (data.defaultFormat && formatSelect) {
       formatSelect.value = String(data.defaultFormat);
+      try { localStorage.setItem('sharedom_format', String(data.defaultFormat)); } catch {}
     }
   } catch {
     applyLanguage('en');
@@ -159,6 +197,11 @@ async function loadSettings(): Promise<void> {
 }
 
 async function saveSettings(): Promise<void> {
+  try {
+    localStorage.setItem('sharedom_lang', currentLanguage);
+    if (scaleSelect) localStorage.setItem('sharedom_scale', scaleSelect.value);
+    if (formatSelect) localStorage.setItem('sharedom_format', formatSelect.value);
+  } catch {}
   try {
     await chrome.storage.local.set({
       language: currentLanguage,
@@ -180,7 +223,7 @@ async function checkActiveTab(): Promise<void> {
   }
 }
 
-async function startInspection(): Promise<void> {
+async function triggerTabAction(actionType: 'START_INSPECTOR' | 'CAPTURE_CONSOLE_LOGS' | 'CAPTURE_NETWORK_REQUESTS'): Promise<void> {
   hasPermissionError = false;
   updateBannerUI();
 
@@ -195,25 +238,30 @@ async function startInspection(): Promise<void> {
   };
 
   try {
-    // 1. Check if content script is already present and responding
     await chrome.tabs.sendMessage(currentTab.id, {
-      type: 'START_INSPECTOR',
+      type: actionType,
       options: inspectorOptions,
     });
     window.close();
   } catch {
-    // 2. If not running, dynamically inject content script via scripting + activeTab
     try {
+      try {
+        await chrome.scripting.executeScript({
+          target: { tabId: currentTab.id },
+          files: ['page-tracker.js'],
+          world: 'MAIN',
+        });
+      } catch {}
+
       await chrome.scripting.executeScript({
         target: { tabId: currentTab.id },
         files: ['content.js'],
       });
 
-      // Brief yield to allow content script registration
       setTimeout(async () => {
         try {
           await chrome.tabs.sendMessage(currentTab!.id!, {
-            type: 'START_INSPECTOR',
+            type: actionType,
             options: inspectorOptions,
           });
           window.close();
@@ -221,7 +269,7 @@ async function startInspection(): Promise<void> {
           hasPermissionError = true;
           updateBannerUI();
         }
-      }, 100);
+      }, 120);
     } catch {
       hasPermissionError = true;
       updateBannerUI();
@@ -238,8 +286,10 @@ langToggleBtn?.addEventListener('click', async () => {
 scaleSelect?.addEventListener('change', saveSettings);
 formatSelect?.addEventListener('change', saveSettings);
 
-inspectBtn?.addEventListener('click', startInspection);
-bannerRetryBtn?.addEventListener('click', startInspection);
+inspectBtn?.addEventListener('click', () => triggerTabAction('START_INSPECTOR'));
+captureConsoleBtn?.addEventListener('click', () => triggerTabAction('CAPTURE_CONSOLE_LOGS'));
+captureNetworkBtn?.addEventListener('click', () => triggerTabAction('CAPTURE_NETWORK_REQUESTS'));
+bannerRetryBtn?.addEventListener('click', () => triggerTabAction('START_INSPECTOR'));
 
 bannerReloadBtn?.addEventListener('click', async () => {
   if (currentTab?.id) {
@@ -250,6 +300,5 @@ bannerReloadBtn?.addEventListener('click', async () => {
   }
 });
 
-loadSettings();
-checkActiveTab();
-
+initFastSettings();
+Promise.all([loadSettings(), checkActiveTab()]);

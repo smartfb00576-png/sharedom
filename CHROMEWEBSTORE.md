@@ -26,6 +26,7 @@ sharedom is a fast, lightweight developer tool that allows you to inspect and ca
 • 📋 Copy to Clipboard: Copy high-fidelity PNG image data directly to your system clipboard (via native Clipboard API) to paste immediately into Figma, Slack, Notion, GitHub issues, Discord, or documentation.
 • 💾 High-Resolution Export: Capture at 1x, 2x (Retina HD), or 3x (Ultra HD) resolution in PNG (with alpha transparency), JPEG, or WebP.
 • 📄 Instant PDF Document Export: Directly export captured DOM components into clean, self-contained PDF documents with configurable metadata and page sizes.
+• 📊 Console Logs & Network Captures: Export formatted terminal logs and HTTP request tables (method, endpoint, status, duration) as high-resolution images or PDF documents.
 • 🎨 Automatic Background Detection: Automatically detects and applies the computed background color of dark or themed elements, with full manual override options (Transparent, White, Dark, or Custom).
 • 🌐 Bicultural & Multilingual: One-click instant switching between English and Spanish.
 • 🛡️ Shadow DOM Isolation: All extension overlays and controls run in an isolated Shadow DOM container and never conflict with website stylesheets or appear in captured images.

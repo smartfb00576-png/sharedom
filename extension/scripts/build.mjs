@@ -29,14 +29,27 @@ if (fs.existsSync(path.join(distDir, 'content.global.js'))) {
 }
 
 execSync(
+  `npx tsup ${path.resolve(extDir, 'src/content/page-tracker.ts')} --format iife --target es2022 --no-splitting --out-dir ${distDir}`,
+  { stdio: 'inherit', cwd: rootDir }
+);
+
+if (fs.existsSync(path.join(distDir, 'page-tracker.global.js'))) {
+  fs.renameSync(path.join(distDir, 'page-tracker.global.js'), path.join(distDir, 'page-tracker.js'));
+}
+
+execSync(
   `npx tsup ${path.resolve(extDir, 'src/background/service-worker.ts')} --format esm --target es2022 --no-splitting --out-dir ${distDir}`,
   { stdio: 'inherit', cwd: rootDir }
 );
 
 execSync(
-  `npx tsup ${path.resolve(extDir, 'src/popup/popup.ts')} --format esm --target es2022 --no-splitting --out-dir ${distDir}`,
+  `npx tsup ${path.resolve(extDir, 'src/popup/popup.ts')} --format iife --target es2022 --no-splitting --out-dir ${distDir}`,
   { stdio: 'inherit', cwd: rootDir }
 );
+
+if (fs.existsSync(path.join(distDir, 'popup.global.js'))) {
+  fs.renameSync(path.join(distDir, 'popup.global.js'), path.join(distDir, 'popup.js'));
+}
 
 console.log('Copying static assets...');
 
