@@ -25,6 +25,7 @@ sharedom is a fast, lightweight developer tool that allows you to inspect and ca
 • ⌨️ Full Keyboard Navigation: Traverse parent containers with [↑ Up Arrow] and child elements with [↓ Down Arrow], and capture instantly with [Enter] or [Space].
 • 📋 Copy to Clipboard: Copy high-fidelity PNG image data directly to your system clipboard (via native Clipboard API) to paste immediately into Figma, Slack, Notion, GitHub issues, Discord, or documentation.
 • 💾 High-Resolution Export: Capture at 1x, 2x (Retina HD), or 3x (Ultra HD) resolution in PNG (with alpha transparency), JPEG, or WebP.
+• 📄 Instant PDF Document Export: Directly export captured DOM components into clean, self-contained PDF documents with configurable metadata and page sizes.
 • 🎨 Automatic Background Detection: Automatically detects and applies the computed background color of dark or themed elements, with full manual override options (Transparent, White, Dark, or Custom).
 • 🌐 Bicultural & Multilingual: One-click instant switching between English and Spanish.
 • 🛡️ Shadow DOM Isolation: All extension overlays and controls run in an isolated Shadow DOM container and never conflict with website stylesheets or appear in captured images.
@@ -79,24 +80,21 @@ This generates `sharedom-extension.zip`.
 2. Sign in with your Google account.
 3. If this is your first time, pay the one-time \$5 USD developer registration fee.
 
-### Step 3: Upload the ZIP
-1. Click **"Add new item"** (or **"New Item"**).
-2. Drag and drop `sharedom-extension.zip` or click **"Browse files"** to select it.
+### Step 3: Upload the Package
 
-### Step 4: Complete Store Listing
-1. In the **"Store Listing"** tab:
-   - Fill in **Description** from Section 1 above.
-   - Select **Category**: *Developer Tools*.
-   - Upload the **128×128 icon** (`extension/icons/icon-128.png`).
-   - Upload at least **1 screenshot** (1280×800).
-2. In the **"Privacy"** tab:
-   - Paste the single purpose description from Section 3.
-   - Enter the permission justifications from Section 2 for `activeTab`, `scripting`, `storage`, `contextMenus`, and `host_permissions`.
-   - Check **"I certify that this extension does not collect or transmit user data"**.
-3. In the **"Distribution"** tab:
-   - Select **Visibility**: *Public* (or *Unlisted* if testing).
-   - Select **Regions**: *All regions*.
+#### A. If updating an EXISTING extension in the store:
+1. In your [Developer Dashboard](https://chrome.google.com/webstore/devconsole), click on your extension: **"ShareDOM - DOM Screenshot Inspector"**.
+2. In the left sidebar, click on **"Package"** (Paquete).
+3. Click the **"Upload new package"** (Subir nuevo paquete) button.
+4. Drag and drop `sharedom-extension.zip` or select it from your project root.
+5. Verify that the dashboard detects version `1.1.0`.
 
-### Step 5: Submit for Review
-1. Click **"Submit for Review"**.
-2. Standard review usually takes **24 to 72 hours**. Once approved, it will be live on the Chrome Web Store!
+#### B. If publishing for the FIRST time:
+1. Click **"New Item"** (Nuevo elemento) at the top right of the dashboard.
+2. Drag and drop `sharedom-extension.zip`.
+3. Fill out the Store Listing, Privacy, and Distribution sections using the metadata in Sections 1-3 above.
+
+### Step 4: Submit for Review
+1. Review your changes (optionally add release notes in the dashboard).
+2. Click **"Submit for review"** (Enviar para revisión).
+3. The review process typically takes between **24 and 72 hours**. Once approved, Chrome will automatically update all existing users to version 1.1.0!
