@@ -136,6 +136,12 @@ export async function downloadPDF(
     filename = 'capture.pdf',
     options: PdfOptions = {}
 ): Promise<void> {
+    if (typeof document === 'undefined') {
+        throw new Error(
+            '[sharedom]: downloadPDF() requires a browser environment. ' +
+            'For SSR environments, use "createPdfFromImageSSR" or "buildPdf" from "sharedom/ssr".'
+        );
+    }
     const blob = await capturePDF(target, options);
     const url  = URL.createObjectURL(blob);
 
@@ -162,11 +168,16 @@ export async function printElement(
     target: DomTarget,
     options: Pick<PdfOptions, 'scale' | 'quality' | 'backgroundColor' | 'title'> = {}
 ): Promise<void> {
+    if (typeof document === 'undefined') {
+        throw new Error(
+            '[sharedom]: printElement() requires a browser environment with window/document access.'
+        );
+    }
     const {
         scale           = 2,
         quality         = 0.92,
         backgroundColor = '#ffffff',
-        title           = document.title || 'sharedom',
+        title           = (typeof document !== 'undefined' ? document.title : '') || 'sharedom',
     } = options;
 
     const { dataUrl } = await captureAsJpeg(target, scale, quality, backgroundColor);

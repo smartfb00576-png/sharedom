@@ -1,20 +1,22 @@
 # sharedom
 
-Fast and lightweight DOM snapshot and screenshot capture library for the browser and SSR (Node.js, Next.js, SvelteKit).
+Fast and lightweight DOM snapshot, screenshot and PDF capture library for browser and SSR (Node.js, Next.js, SvelteKit).
 
-`sharedom` allows you to capture any HTML element into a high-quality image (PNG, JPEG, or WebP) directly in the browser or render server-side snapshots with zero runtime dependencies.
+`sharedom` allows you to capture any HTML element into a high-quality image (PNG, JPEG, or WebP) or export pixel-perfect, vector-scaled PDF documents directly in the browser and in server-side environments with zero runtime dependencies.
 
 ---
 
 ## Features
 
 - ⚡ **Lightweight & Fast**: Uses native browser APIs (`XMLSerializer`, SVG `foreignObject`, and `HTMLCanvasElement`).
-- 🌐 **SSR First-Class Support**: Dedicated `sharedom/ssr` module for Next.js Route Handlers and SvelteKit endpoints.
+- 📄 **Pixel-Perfect PDF Generation**: Export elements to standard PDF 1.4 with preset page sizes (A4, Letter, A3, Auto), orientation, margins, and UTF-16BE metadata support with 0 external dependencies.
+- 🖨️ **Direct Printing**: Instant native browser print dialog helper for any DOM element.
+- 🌐 **SSR First-Class Support**: Dedicated `sharedom/ssr` module for Next.js Route Handlers, SvelteKit endpoints, and Node.js with built-in server-side PDF generation.
 - 🎨 **Accurate Styles**: Automatically copies computed styles from source elements.
 - 🔍 **High-DPI Support**: Configurable scale factor for crisp Retina / 4K snapshots.
-- 🖼️ **Multiple Formats**: Export to PNG (with transparency), JPEG, or WebP.
+- 🖼️ **Multiple Formats**: Export to PNG (with transparency), JPEG, WebP, or PDF.
 - 🚀 **Automatic Image Optimization**: Cleans transparent pixel entropy and sanitizes Base64 output automatically.
-- 💾 **Built-in Downloader**: Helper function to trigger instant file downloads in the browser.
+- 💾 **Built-in Downloader**: Helper functions to trigger instant image or PDF file downloads in the browser.
 - 📦 **TypeScript First**: Full type definitions included out of the box for ESM and CJS.
 
 ---
@@ -63,6 +65,35 @@ await downloadCapture('#my-card', 'card-snapshot.png', {
   scale: 2,
   backgroundColor: '#ffffff'
 });
+```
+
+### 3. Capture & Export as PDF
+
+```typescript
+import { downloadPDF, capturePDF, printElement } from 'sharedom';
+
+// 1. Direct PDF download with page presets and metadata
+await downloadPDF('#invoice-card', 'invoice-2026.pdf', {
+  pageSize: 'A4',         // 'auto' | 'A4' | 'Letter' | 'A3' | 'A5' | 'Legal' | 'Tabloid'
+  orientation: 'portrait', // 'portrait' | 'landscape'
+  margin: 20,              // margin in points (default: 0)
+  scale: 2,               // 2x Retina sharpness
+  quality: 0.92,          // JPEG stream quality
+  title: 'Invoice INV-2026-0042',
+  author: 'sharedom Studio',
+  subject: 'Client Billing',
+  keywords: ['invoice', 'billing', '2026'],
+});
+
+// 2. Obtain raw PDF Blob for custom iframe preview or uploading
+const pdfBlob = await capturePDF('#report-table', {
+  pageSize: 'Letter',
+  orientation: 'landscape',
+});
+const previewUrl = URL.createObjectURL(pdfBlob);
+
+// 3. Open browser print dialog for an element
+await printElement('#invoice-card', { title: 'Invoice Print' });
 ```
 
 ---
@@ -137,6 +168,34 @@ export const POST: RequestHandler = async ({ request }) => {
 };
 ```
 
+### 4. Next.js App Router: PDF Route Handler (Zero-Dependency)
+
+```typescript
+// app/api/pdf/route.ts
+import { createPdfFromImageSSR } from 'sharedom/ssr';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const { image, title, author } = await request.json();
+
+  // Generates PDF 1.4 Uint8Array directly from image bytes or Data URL
+  const pdfBytes = createPdfFromImageSSR(image, {
+    pageSize: 'A4',
+    orientation: 'portrait',
+    margin: 28,
+    title: title || 'Server Document',
+    author: author || 'sharedom',
+  });
+
+  return new NextResponse(pdfBytes, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="document.pdf"',
+    },
+  });
+}
+```
+
 ---
 
 ## API Reference
@@ -165,21 +224,68 @@ Captures a DOM element and triggers a browser download.
 | `width` | `number` | `element.width` | Custom target width in pixels. |
 | `height` | `number` | `element.height` | Custom target height in pixels. |
 
+#### `downloadPDF(target, filename?, options?)`
+Captures a DOM element and triggers a direct PDF file download in the browser.
+- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
+- **`filename`** (`string`, optional, default: `'capture.pdf'`): The name of the downloaded PDF file.
+- **`options`** (`PdfOptions`, optional): Configuration options for the PDF document.
+
+#### `capturePDF(target, options?)`
+Captures a DOM element and returns a Promise resolving to a PDF `Blob`.
+- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
+- **`options`** (`PdfOptions`, optional): Configuration options for the PDF document.
+
+#### `printElement(target, options?)`
+Opens the browser's native print dialog for the selected element in a hidden iframe.
+- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to print.
+- **`options`** (`Pick<PdfOptions, 'scale' | 'quality' | 'backgroundColor' | 'title'>`, optional): Print configuration.
+
+#### `PdfOptions`
+| Option | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `pageSize` | `'auto' \| 'A4' \| 'Letter' \| 'A3' \| 'A5' \| 'Legal' \| 'Tabloid'` | `'auto'` | PDF page preset size. `'auto'` fits page exactly to element dimensions. |
+| `orientation` | `'portrait' \| 'landscape'` | `'portrait'` | Page orientation (applicable when `pageSize` is not `'auto'`). |
+| `margin` | `number` | `0` | Margin around the content in points (`1 pt = 1/72 inch`). |
+| `scale` | `number` | `2` | Rendering scale factor for crisp Retina/High-DPI output. |
+| `quality` | `number` | `0.92` | JPEG stream compression quality (between `0` and `1`). |
+| `backgroundColor` | `string` | `'#ffffff'` | Background fill color of the page. |
+| `title` | `string` | `undefined` | PDF Document title in `/Info` dictionary (supports UTF-16BE Spanish/Unicode). |
+| `author` | `string` | `undefined` | PDF Document author. |
+| `subject` | `string` | `undefined` | PDF Document subject. |
+| `keywords` | `string \| string[]` | `undefined` | PDF Document keywords. |
+
 ---
 
 ### SSR: `sharedom/ssr`
 
 #### `captureSSR(htmlOrUrl, options?)`
-Captures an HTML string or URL on the server and returns a `Promise<Uint8Array>`.
+Captures an HTML string or URL on the server and returns a `Promise<Uint8Array>` containing the SVG foreignObject markup.
+
+#### `createSsrSnapshot(htmlOrUrl, options?)`
+Creates an SSR snapshot and returns it as a Base64 Data URL (`data:image/svg+xml;base64,...`).
+
+#### `createPdfFromImageSSR(image, options?)`
+Generates a valid PDF 1.4 binary (`Uint8Array`) on the server with **zero native dependencies**.
+- **`image`** (`Uint8Array | string`): Raw JPEG `Uint8Array` bytes or a Base64 Data URL (`data:image/jpeg;base64,...`). Auto-detects pixel width and height from JPEG SOF markers.
+- **`options`** (`SsrPdfOptions`, optional): PDF build options (`pageSize`, `orientation`, `margin`, `title`, `author`, `keywords`, `dpi`).
+
+#### `buildPdf(jpegBytes, options)`
+Low-level, pure TypeScript zero-dependency PDF 1.4 binary builder.
+- **`jpegBytes`** (`Uint8Array`): Raw JPEG byte stream.
+- **`options`** (`PdfBuildOptions`): Detailed page dimensions, image pixel size, metadata, and margins.
+
+#### `getJpegDimensions(bytes)`
+Parses JPEG SOF (Start of Frame) segment markers according to ISO/IEC 10918-1 and returns `{ width: number, height: number }` without external libraries.
 
 #### `SsrCaptureOptions`
 | Option | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `viewport` | `{ width: number, height: number }` | `{ width: 1200, height: 630 }` | Viewport dimensions. |
 | `scale` | `number` | `2` | Device pixel ratio / scale. |
-| `format` | `'png' \| 'jpeg' \| 'webp'` | `'png'` | Output image format. |
+| `format` | `'svg' \| 'png' \| 'jpeg' \| 'webp'` | `'svg'` | Output format MIME. |
 | `backgroundColor` | `string` | `'#ffffff'` | Background fill color. |
 | `delay` | `number` | `0` | Delay in milliseconds before capture. |
+| `styles` | `string` | `''` | Custom CSS stylesheet injected into SVG. |
 
 ---
 

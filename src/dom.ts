@@ -1,6 +1,13 @@
 import { DomTarget } from './types';
 
 export function resolveElement(target: DomTarget): HTMLElement {
+    if (typeof document === 'undefined') {
+        throw new Error(
+            '[sharedom]: DOM operations require a browser environment (document is undefined). ' +
+            'For server-side rendering (SSR/Node.js), use the "sharedom/ssr" module.'
+        );
+    }
+
     if (typeof target === 'string') {
         const element = document.querySelector<HTMLElement>(target);
         if (!element) {
@@ -9,7 +16,7 @@ export function resolveElement(target: DomTarget): HTMLElement {
         return element;
     }
 
-    if (target instanceof HTMLElement) {
+    if (typeof HTMLElement !== 'undefined' && target instanceof HTMLElement) {
         return target;
     }
 
@@ -43,24 +50,24 @@ export function validateOptions(options: { scale?: number; quality?: number; for
 }
 
 export function syncDynamicStates(source: Element, target: Element): void {
-    if (source instanceof HTMLInputElement && target instanceof HTMLInputElement) {
+    if (typeof HTMLInputElement !== 'undefined' && source instanceof HTMLInputElement && target instanceof HTMLInputElement) {
         target.setAttribute('value', source.value);
         target.value = source.value;
         if (source.checked) {
             target.setAttribute('checked', '');
             target.checked = true;
         }
-    } else if (source instanceof HTMLTextAreaElement && target instanceof HTMLTextAreaElement) {
+    } else if (typeof HTMLTextAreaElement !== 'undefined' && source instanceof HTMLTextAreaElement && target instanceof HTMLTextAreaElement) {
         target.textContent = source.value;
         target.value = source.value;
-    } else if (source instanceof HTMLSelectElement && target instanceof HTMLSelectElement) {
+    } else if (typeof HTMLSelectElement !== 'undefined' && source instanceof HTMLSelectElement && target instanceof HTMLSelectElement) {
         target.value = source.value;
         const targetOptions = target.querySelectorAll('option');
         const selectedIndex = source.selectedIndex;
         if (selectedIndex >= 0 && targetOptions[selectedIndex]) {
             targetOptions[selectedIndex].setAttribute('selected', 'true');
         }
-    } else if (source instanceof HTMLCanvasElement && target instanceof HTMLCanvasElement) {
+    } else if (typeof HTMLCanvasElement !== 'undefined' && source instanceof HTMLCanvasElement && target instanceof HTMLCanvasElement) {
         try {
             const dataUrl = source.toDataURL();
             const image = new Image();

@@ -6,8 +6,9 @@ import { createSvgDataUrl } from './svg';
 import { renderSvgToCanvas } from './canvas';
 
 export type { CaptureOptions, DomTarget, DOMTarget, PdfOptions, PdfPageSize } from './types';
+export type { PdfBuildOptions } from './pdf-writer';
 export { capturePDF, downloadPDF, printElement } from './pdf';
-
+export { buildPdf } from './pdf-writer';
 
 export async function capture(target: DomTarget, options: CaptureOptions = {}): Promise<string> {
     validateOptions(options);
@@ -42,6 +43,12 @@ export async function downloadCapture(
     filename = 'screenshot.png',
     options: CaptureOptions = {}
 ): Promise<void> {
+    if (typeof document === 'undefined') {
+        throw new Error(
+            '[sharedom]: downloadCapture() requires a browser environment. ' +
+            'For SSR environments, use "captureSSR" from "sharedom/ssr".'
+        );
+    }
     const dataUrl = await capture(target, options);
     const link = document.createElement('a');
     link.download = filename;

@@ -100,6 +100,7 @@ export function renderPdfDemo(container: HTMLElement): void {
   let pageSize: PdfPageSize = 'auto';
   let orientation: 'portrait' | 'landscape' = 'portrait';
   let margin = 0;
+  let scale = 2;
   let isGenerating = false;
   let isPreviewing = false;
   let lastBlobUrl = '';
@@ -294,16 +295,19 @@ export function renderPdfDemo(container: HTMLElement): void {
 
         setStatus(`✓ ${(blob.size / 1024).toFixed(1)} KB · ${pageSize} · ${scale}x`);
         showToast(t.pdfDemo.previewReady);
-
-        document.getElementById('btnOpenPDF')?.addEventListener('click', () => {
-          if (lastBlobUrl) window.open(lastBlobUrl, '_blank');
-        });
       } catch (err) {
         const msg = (err as Error).message;
         showToast(`${t.pdfDemo.toastError}: ${msg}`);
         setStatus(`✕ ${msg}`);
       } finally {
         setPreviewing(false);
+      }
+    });
+
+    // ── Open in new tab button ──────────────────────────────────────────────
+    document.getElementById('btnOpenPDF')?.addEventListener('click', () => {
+      if (lastBlobUrl) {
+        window.open(lastBlobUrl, '_blank');
       }
     });
 

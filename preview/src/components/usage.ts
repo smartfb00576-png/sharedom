@@ -46,6 +46,24 @@ await downloadCapture('#report-table', 'analytics-report.png', {
   format: 'png',
 });`,
     },
+    {
+      getLabel: () => 'PDF Export',
+      filename: 'client-pdf.ts',
+      getCode: () => `import { downloadPDF, capturePDF } from 'sharedom';
+
+// Direct PDF download with page presets and metadata
+await downloadPDF('#invoice-card', 'invoice.pdf', {
+  pageSize: 'A4',
+  orientation: 'portrait',
+  margin: 20,
+  scale: 2,
+  title: 'Invoice INV-2026-0042',
+  author: 'sharedom Studio',
+});
+
+// Or get the raw PDF Blob for preview
+const pdfBlob = await capturePDF('#invoice-card', { pageSize: 'A4' });`,
+    },
   ];
 
   const ssrSnippets = [
@@ -132,6 +150,31 @@ app.post('/api/snap', async (req, res) => {
   res.setHeader('Content-Type', 'image/png');
   res.send(Buffer.from(imageBuffer));
 });`,
+    },
+    {
+      getLabel: () => 'Next.js PDF',
+      filename: 'app/api/pdf/route.ts',
+      getCode: () => `import { createPdfFromImageSSR } from 'sharedom/ssr';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const { image, title } = await request.json();
+
+  // Generates valid PDF 1.4 Uint8Array directly from image bytes or Data URL
+  const pdfBytes = createPdfFromImageSSR(image, {
+    pageSize: 'A4',
+    orientation: 'portrait',
+    margin: 28,
+    title: title || 'Server Document',
+  });
+
+  return new NextResponse(pdfBytes, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="document.pdf"',
+    },
+  });
+}`,
     },
   ];
 
