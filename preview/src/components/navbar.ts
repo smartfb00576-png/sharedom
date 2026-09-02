@@ -16,11 +16,13 @@ export function renderNavbar(container: HTMLElement): void {
 
         <div class="nav-links">
           <a href="#playground">${t.nav.playground}</a>
+          <a href="#pdf-demo">PDF Demo</a>
           <a href="#features">${t.nav.features}</a>
           <a href="#usage">${t.nav.usage}</a>
           <a href="https://www.npmjs.com/package/sharedom" target="_blank" rel="noopener">${t.nav.npm}</a>
           <a href="https://github.com/Erickgiber/sharedom" target="_blank" rel="noopener">${t.nav.github}</a>
         </div>
+
 
         <div class="nav-right">
           <a href="https://www.paypal.com/ncp/payment/62GKBN5BDSAWL" target="_blank" rel="noopener noreferrer" class="nav-coffee-btn" title="${t.nav.buyCoffee}">

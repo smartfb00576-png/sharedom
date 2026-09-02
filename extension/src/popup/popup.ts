@@ -127,10 +127,11 @@ function applyLanguage(lang: ExtensionLanguage): void {
 
   if (formatSelect) {
     const opts = formatSelect.options;
-    if (opts.length >= 3) {
+    if (opts.length >= 4) {
       opts[0].textContent = t.fmtPng;
       opts[1].textContent = t.fmtJpeg;
       opts[2].textContent = t.fmtWebp;
+      opts[3].textContent = t.fmtPdf;
     }
   }
 

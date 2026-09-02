@@ -479,6 +479,23 @@ export const overlayStyles = `
   border-color: rgba(255, 255, 255, 0.18);
 }
 
+.sharedom-btn-pdf {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.sharedom-btn-pdf:hover {
+  background: rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+}
+
+.sharedom-btn-pdf:active {
+  transform: translateY(0);
+}
+
 .sharedom-btn-primary {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: #ffffff;

@@ -10,3 +10,66 @@ export interface CaptureOptions {
 
 export type DomTarget = string | HTMLElement;
 export type DOMTarget = DomTarget;
+
+/** Page size presets available for PDF export. */
+export type PdfPageSize = 'auto' | 'A3' | 'A4' | 'A5' | 'Letter' | 'Legal' | 'Tabloid';
+
+/**
+ * Options for PDF export functions.
+ * All properties are optional — by default the PDF page matches
+ * the exact pixel dimensions of the captured DOM element.
+ */
+export interface PdfOptions {
+    /**
+     * Page size preset.
+     * - `'auto'` (default): page matches the element dimensions exactly.
+     * - Any other value: the image is scaled to fit the selected page size.
+     */
+    pageSize?: PdfPageSize;
+
+    /**
+     * Page orientation. Only applies when `pageSize` is not `'auto'`.
+     * @default 'portrait'
+     */
+    orientation?: 'portrait' | 'landscape';
+
+    /**
+     * Margin around the image in points (1pt ≈ 0.353 mm).
+     * Applied to all four sides.
+     * @default 0
+     */
+    margin?: number;
+
+    /**
+     * Pixel density multiplier used when capturing the DOM element.
+     * Higher values produce a sharper image inside the PDF.
+     * @default 2
+     */
+    scale?: number;
+
+    /**
+     * Background color applied to the element before capture.
+     * Defaults to white (`#ffffff`) because JPEG (used internally) has no alpha channel.
+     */
+    backgroundColor?: string;
+
+    /**
+     * JPEG compression quality for the image embedded in the PDF. Range: 0 – 1.
+     * @default 0.92
+     */
+    quality?: number;
+
+    // ── PDF Metadata ────────────────────────────────────────────────────────
+
+    /** Document title written into the PDF Info dictionary. */
+    title?: string;
+
+    /** Author name written into the PDF Info dictionary. */
+    author?: string;
+
+    /** Subject / description written into the PDF Info dictionary. */
+    subject?: string;
+
+    /** Keywords written into the PDF Info dictionary. */
+    keywords?: string | string[];
+}

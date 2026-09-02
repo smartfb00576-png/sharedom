@@ -1,10 +1,12 @@
 import { renderNavbar } from './src/components/navbar';
 import { renderHero, initHeroAnimation } from './src/components/hero';
 import { renderPlayground } from './src/components/playground';
+import { renderPdfDemo } from './src/components/pdf-demo';
 import { renderFeatures } from './src/components/features';
 import { renderUsage } from './src/components/usage';
 import { renderFooter } from './src/components/footer';
 import { renderPrivacy } from './src/components/privacy';
+
 import { onLanguageChange, getT } from './src/i18n';
 
 const revealedKeys = new Set<string>();
@@ -88,19 +90,22 @@ function handleRoute(): void {
 }
 
 function initApp(): void {
-  const navMount = document.getElementById('navbar-mount');
-  const heroMount = document.getElementById('hero-mount');
+  const navMount        = document.getElementById('navbar-mount');
+  const heroMount       = document.getElementById('hero-mount');
   const playgroundMount = document.getElementById('playground-mount');
-  const featuresMount = document.getElementById('features-mount');
-  const usageMount = document.getElementById('usage-mount');
-  const footerMount = document.getElementById('footer-mount');
+  const pdfDemoMount    = document.getElementById('pdf-demo-mount');
+  const featuresMount   = document.getElementById('features-mount');
+  const usageMount      = document.getElementById('usage-mount');
+  const footerMount     = document.getElementById('footer-mount');
 
-  if (navMount) renderNavbar(navMount);
-  if (heroMount) renderHero(heroMount);
+  if (navMount)        renderNavbar(navMount);
+  if (heroMount)       renderHero(heroMount);
   if (playgroundMount) renderPlayground(playgroundMount);
-  if (featuresMount) renderFeatures(featuresMount);
-  if (usageMount) renderUsage(usageMount);
-  if (footerMount) renderFooter(footerMount);
+  if (pdfDemoMount)    renderPdfDemo(pdfDemoMount);
+  if (featuresMount)   renderFeatures(featuresMount);
+  if (usageMount)      renderUsage(usageMount);
+  if (footerMount)     renderFooter(footerMount);
+
 
   handleRoute();
   window.addEventListener('hashchange', handleRoute);

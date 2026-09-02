@@ -1,4 +1,4 @@
-import { capture, CaptureOptions } from '../../../src/index';
+import { capture, downloadPDF, CaptureOptions, PdfOptions } from '../../../src/index';
 import { translations, ExtensionLanguage } from '../shared/i18n';
 
 export interface ModalOptions {
@@ -387,6 +387,23 @@ export class ActionModal {
       this.triggerDownload();
     });
 
+    const downloadPdfBtn = document.createElement('button');
+    downloadPdfBtn.className = 'sharedom-btn sharedom-btn-pdf';
+    downloadPdfBtn.setAttribute('title', t.pdfTooltip);
+    downloadPdfBtn.innerHTML = `
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span>${t.pdf}</span>
+    `;
+    downloadPdfBtn.addEventListener('click', async () => {
+      await this.triggerPdfDownload(downloadPdfBtn);
+    });
+
     const copyBtn = document.createElement('button');
     copyBtn.className = 'sharedom-btn sharedom-btn-primary';
     copyBtn.innerHTML = `
@@ -401,6 +418,7 @@ export class ActionModal {
     });
 
     footerRight.appendChild(downloadBtn);
+    footerRight.appendChild(downloadPdfBtn);
     footerRight.appendChild(copyBtn);
 
     footer.appendChild(footerLeft);
@@ -526,5 +544,45 @@ export class ActionModal {
     link.click();
 
     this.onToast(`${t.downloaded} ${filename}`, '📥');
+  }
+
+  private async triggerPdfDownload(btn?: HTMLButtonElement): Promise<void> {
+    if (!this.currentElement || this.isCapturing) return;
+    const t = translations[this.currentOptions.language].modal;
+
+    const tag = this.currentElement.tagName.toLowerCase();
+    const id = this.currentElement.id ? `-${this.currentElement.id}` : '';
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+    const filename = `domsnap-${tag}${id}-${timestamp}.pdf`;
+
+    const originalHTML = btn?.innerHTML;
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `
+        <div class="sharedom-spinner" style="width:13px;height:13px;border-width:2px;display:inline-block"></div>
+        <span>${t.pdf}</span>
+      `;
+    }
+
+    try {
+      const bgColor = this.currentOptions.backgroundColor ?? '#ffffff';
+      const pdfOpts: PdfOptions = {
+        scale: this.currentOptions.scale,
+        backgroundColor: bgColor,
+        quality: 0.92,
+        pageSize: 'auto',
+      };
+
+      await downloadPDF(this.currentElement, filename, pdfOpts);
+      this.onToast(`${t.pdfSuccess} ${filename}`, '📄');
+    } catch (error) {
+      this.onToast(`${t.pdfError}: ${String(error)}`, '⚠️');
+    } finally {
+      if (btn && originalHTML) {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    }
   }
 }

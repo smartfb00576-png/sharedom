@@ -5,7 +5,9 @@ import { inlineImages } from './images';
 import { createSvgDataUrl } from './svg';
 import { renderSvgToCanvas } from './canvas';
 
-export type { CaptureOptions, DomTarget, DOMTarget };
+export type { CaptureOptions, DomTarget, DOMTarget, PdfOptions, PdfPageSize } from './types';
+export { capturePDF, downloadPDF, printElement } from './pdf';
+
 
 export async function capture(target: DomTarget, options: CaptureOptions = {}): Promise<string> {
     validateOptions(options);
